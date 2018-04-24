@@ -14,9 +14,9 @@ public class Menu{
     Empresa emp = new Empresa();
     Individual ind = new Individual();
     Entidade ent = new Entidade();
-    Factura fact = new Factura();
+    Fatura fact = new Fatura();
     
-    HashMap<Integer, String> users = new HashMap<Integer, String>();
+    HashMap<Integer, String> users = new HashMap<>();
     
     
     public static void clear() {  
@@ -27,20 +27,23 @@ public class Menu{
         System.out.println(o.toString());
     }
     public void login_menu(){
+        clear();
         out("\n\t\tBem vindo ao JavaFactura\n\n\n\nEscolha a sua opção:");
         out("\n\t1)Fazer login"); 
         //validar o acesso à aplicação utilizando as credenciais (nif e password)
         out("\n\t2)Registar um novo utilizador"); 
         //registar um contribuinte, quer seja individual ou empresa
     }
-    public void menu_individual(){
+    public void menu_individual(int nif){
+        clear();
         out("\n\t Bem vindo, escolha a sua opção: \n\n\n\n\n");
         out("\n\t1)Verificar despesas"); 
         //verificar, por parte do contribuinte individual, as despesas que foram emitidas em seu nome 
         out("\n\t2)Verificar dedução fiscal acumulada");
         // verificar o montante de dedução fiscal acumulado, por si e pelo agregado familiar;
     }
-    public void menu_empresa(){
+    public void menu_empresa(int nif){
+        clear();
         out("\n\t Bem vindo, escolha a sua opção: \n\n\n\n\n");
         out("\n\t1)Criar fatura"); 
         //criar facturas associadas a despesas feitas por um contribuinte individual
@@ -55,7 +58,8 @@ public class Menu{
         out("\n\t5)Verificar total faturado"); 
         // indicar o total facturado por uma empresa num determinado período
     }
-    public void menu_administrador(){
+    public void menu_admin(){
+        clear();
         out("\n\t Bem vindo, escolha a sua opção: \n\n\n\n\n");
         out("\n\t1)Verificar 10 contribuintes que mais gastam");
         // determinar a relação dos 10 contribuintes que mais gastam em todo o sistema
@@ -74,57 +78,61 @@ public class Menu{
         
         switch(in.nextInt()){
             case 1: // Fazer Login de utilizador existente
-                out("Introduza NIF: ");
+                out("\nIntroduza NIF: ");
                 int a = in.nextInt();
                 if(a == 1234 || (a > 99999999 && a < 1000000000 && (a < 300000000 || a >= 500000000 || a < 700000000 || a >= 800000000))){
                     boolean check = users.containsKey(a);
                     if(check == true){
-                       out("Introduza password: ");
+                       out("\nIntroduza password: ");
                        String pw = in.next();
                        if(pw == users.get(a)){
-                           if(a < 300000000) menu_individual(a,pw);
-                           else if(a> 3000000)menu_empresa(a,pw);
-                           else if(a == 1234)menu_admin(a,pw);
-                        }
+                           if(a == 1234) menu_admin();
+                           else if(a < 300000000) menu_individual(a);
+                           else if(a> 3000000) menu_empresa(a);
+                       }
                        else {
-                           out("Password incorrecta");
+                           out("\nPassword incorrecta");
                            break;
                         }
                     }
                     else {
-                        out("NIF não existe");
+                        out("\nNIF não existe");
                         break;
                     }        
                 }
                 else {
-                    out("NIF inválido");
+                    out("\nNIF inválido");
                     break;
                 }
                             
             case 2: // Registar Utilizador
-                out("Introduza NIF: ");
+                out("\nIntroduza NIF: ");
                 int b = in.nextInt();
                 if(b > 99999999 && b < 1000000000 && (b < 300000000 || b >= 500000000 || b < 700000000 || b >= 800000000)){
                     boolean check = users.containsKey(b);
                     if(check == false) {
-                        int key = b;
-                        out("Introduza password: ");
+                        out("\nIntroduza password:");
                         String pw = in.next();
-                        users.put(key, pw);
+                        users.put(b, pw);
+                        out("\nRegisto efetuado");
+                        break;
                     }
                     else{
-                        out("NIF já existe");
+                        out("\nNIF já existe");
                         break;
                     }
                 }
                 else {
-                    out("NIF inválido");
+                    out("\nNIF inválido");
                     break;
                 }
+               
             default:
-                out("Opção inválida");
+                out("\nOpção inválida");
                 break;
         }
+        out("\nPrima 1 para continuar");
+        if(in.nextInt() == 1)  ;
     }
     public static void main(String[] args){
         new Menu();
