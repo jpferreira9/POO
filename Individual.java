@@ -9,17 +9,20 @@ public class Individual extends Entidade{
     
     public Individual(){
         this.agregado = 0;
-        this.nifAgregado = 0;
+        this.nifAgregado = new ArrayList<Integer>(0);
         this.coef = 0;
         this.cod = 0;
     }
     
     
-    public Individual (int agreg , int nifAgreg, float coef, int cod){
+    public Individual (int agreg , int na, float coef, int cod){
         this.agregado = agreg;
-        this.nifAgregado = nifAgreg;
         this.coef = coef;
         this.cod = cod;
+        this.nifAgregado.clear();
+        this.nigAregado = new ArrayList<Integer>(na.size());
+        for(Integer i: na)
+            this.nifAgregado.add(na.clone());
     }
     
     public Individual (Individual i){
