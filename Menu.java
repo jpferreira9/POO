@@ -73,66 +73,68 @@ public class Menu{
     }
     public Menu(){ 
         users.put(1234, "bolas");
-        login_menu();
-        Scanner in = new Scanner(System.in);
-        
-        switch(in.nextInt()){
-            case 1: // Fazer Login de utilizador existente
-                out("\nIntroduza NIF: ");
-                int a = in.nextInt();
-                if(a == 1234 || (a > 99999999 && a < 1000000000 && (a < 300000000 || a >= 500000000 || a < 700000000 || a >= 800000000))){
-                    boolean check = users.containsKey(a);
-                    if(check == true){
-                       out("\nIntroduza password: ");
-                       String pw = in.next();
-                       if(pw == users.get(a)){
-                           if(a == 1234) menu_admin();
-                           else if(a < 300000000) menu_individual(a);
-                           else if(a> 3000000) menu_empresa(a);
-                       }
-                       else {
-                           out("\nPassword incorrecta");
-                           break;
+        while(1==1){    
+            login_menu();
+            Scanner in = new Scanner(System.in);
+            
+            switch(in.nextInt()){
+                case 1: // Login de utilizador 
+                    out("\nIntroduza NIF: ");
+                    int a = in.nextInt();
+                    if(a == 1234 || (a > 99999999 && a < 1000000000 && (a < 300000000 || a >= 500000000 || a < 700000000 || a >= 800000000))){
+                        boolean check = users.containsKey(a);
+                        if(check == true){
+                           out("\nIntroduza password: ");
+                           String pw = in.next();
+                           if(pw.equals(users.get(a))){
+                               if(a == 1234) menu_admin();
+                               else if(a < 300000000) menu_individual(a);
+                               else if(a> 3000000) menu_empresa(a);
+                           }
+                           else {
+                               out("\nPassword incorrecta!");
+                               break;
+                            }
+                        }
+                        else {
+                            out("\nNIF não existe!");
+                            break;
+                        }        
+                    }
+                    else {
+                        out("\nNIF inválido!");
+                        break;
+                    }
+                                
+                case 2: // Registar Utilizador
+                    out("\nIntroduza NIF: ");
+                    int b = in.nextInt();
+                    if(b > 99999999 && b < 1000000000 && (b < 300000000 || b >= 500000000 || b < 700000000 || b >= 800000000)){
+                        boolean check = users.containsKey(b);
+                        if(check == false) {
+                            out("\nIntroduza password:");
+                            String pw = in.next();
+                            users.put(b, pw);
+                            out("\nRegisto efetuado");
+                            break;
+                        }
+                        else{
+                            out("\nNIF já existe!");
+                            break;
                         }
                     }
                     else {
-                        out("\nNIF não existe");
-                        break;
-                    }        
-                }
-                else {
-                    out("\nNIF inválido");
-                    break;
-                }
-                            
-            case 2: // Registar Utilizador
-                out("\nIntroduza NIF: ");
-                int b = in.nextInt();
-                if(b > 99999999 && b < 1000000000 && (b < 300000000 || b >= 500000000 || b < 700000000 || b >= 800000000)){
-                    boolean check = users.containsKey(b);
-                    if(check == false) {
-                        out("\nIntroduza password:");
-                        String pw = in.next();
-                        users.put(b, pw);
-                        out("\nRegisto efetuado");
+                        out("\nNIF inválido!");
                         break;
                     }
-                    else{
-                        out("\nNIF já existe");
-                        break;
-                    }
-                }
-                else {
-                    out("\nNIF inválido");
+                   
+                default:
+                    out("\nOpção inválida!");
                     break;
-                }
-               
-            default:
-                out("\nOpção inválida");
-                break;
+            }
+            out("\nPrima qualquer nº>0 para continuar, 0 para sair:");
+            if(in.nextInt() == 0) return;
         }
-        out("\nPrima 1 para continuar");
-        if(in.nextInt() == 1)  ;
     }
     public static void main(String[] args){
         new Menu();
