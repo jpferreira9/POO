@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class Individual extends Entidade{
     
     private int agregado;
@@ -15,14 +16,14 @@ public class Individual extends Entidade{
     }
     
     
-    public Individual (int agreg , int na, float coef, int cod){
+    public Individual (int agreg , ArrayList<Integer> na, float coef, int cod){
         this.agregado = agreg;
         this.coef = coef;
         this.cod = cod;
         this.nifAgregado.clear();
-        this.nigAregado = new ArrayList<Integer>(na.size());
+        this.nifAgregado = new ArrayList<Integer>(na.size());
         for(Integer i: na)
-            this.nifAgregado.add(na.clone());
+            this.nifAgregado.add(i);
     }
     
     public Individual (Individual i){
@@ -36,8 +37,11 @@ public class Individual extends Entidade{
         return this.agregado;
     }
     
-    public int getNifAgreg(){
-        return this.nifAgregado;
+    public ArrayList<Integer> getNifAgreg(){
+        ArrayList<Integer> na = new ArrayList<Integer>(this.nifAgregado.size());
+        for(Integer i: this.nifAgregado)
+            na.add(i);
+        return na;
     }
     
     public float getCoef(){
@@ -52,8 +56,11 @@ public class Individual extends Entidade{
         this.agregado = novoAgreg;
     }
     
-    public void setNifAgreg(int novoNifAgreg){
-        this.nifAgregado = novoNifAgreg;
+    public void setNifAgreg(ArrayList<Integer> novoNifAgreg){
+        this.nifAgregado.clear();
+        this.nifAgregado = new ArrayList<Integer>(novoNifAgreg.size());
+        for(Integer i: nifAgregado)
+            this.nifAgregado.add(i);
     }
     
     public void setCoef(float novoCoef){
@@ -69,7 +76,7 @@ public class Individual extends Entidade{
         if ((o == null) || this.getClass() != o.getClass()) return false;
         Individual i = (Individual) o ;       
         return this.agregado == i.getAgreg() && 
-               this.nifAgregado == i.getNifAgreg() &&
+               this.nifAgregado.equals(i.getNifAgreg()) &&
                this.coef == i.getCoef() &&
                this.cod == i.getCod();
     }
