@@ -9,6 +9,7 @@ public class Individual extends Entidade{
     private int cod;
     
     public Individual(){
+        super();
         this.agregado = 0;
         this.nifAgregado = new ArrayList<Integer>(0);
         this.coef = 0;
@@ -16,7 +17,8 @@ public class Individual extends Entidade{
     }
     
     
-    public Individual (int agreg , ArrayList<Integer> na, float coef, int cod){
+    public Individual (int nif, String email, String nome, String morada, String password ,int agreg , ArrayList<Integer> na, float coef, int cod){
+        super(nif, email, nome, morada, password);
         this.agregado = agreg;
         this.coef = coef;
         this.cod = cod;
@@ -27,6 +29,7 @@ public class Individual extends Entidade{
     }
     
     public Individual (Individual i){
+        super(i);
         this.agregado = i.getAgreg();
         this.nifAgregado = i.getNifAgreg();
         this.coef = i.getCoef();
@@ -75,7 +78,8 @@ public class Individual extends Entidade{
         if (this == o) return true;
         if ((o == null) || this.getClass() != o.getClass()) return false;
         Individual i = (Individual) o ;       
-        return this.agregado == i.getAgreg() && 
+        return super.equals(o) &&
+               this.agregado == i.getAgreg() && 
                this.nifAgregado.equals(i.getNifAgreg()) &&
                this.coef == i.getCoef() &&
                this.cod == i.getCod();
