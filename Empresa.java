@@ -1,37 +1,59 @@
+import java.util.ArrayList;
+
 public class Empresa extends Entidade{
-    private String[] activ;
-    private int fact;
+    
+    private ArrayList<String> activ;
+    private int ffiscal;
     
     public Empresa(){
-        this.activ = new String[0];
-        this.fact = 1;        
+        super();
+        this.activ = new ArrayList<String>(0);
+        this.ffiscal = 1;        
     }
-    public Empresa(String[] actividade, int factorFiscal){
-        this.activ = actividade;
-        this.fact = factorFiscal;
+    
+    public Empresa(int nif, String email, String nome, String morada, String password,ArrayList<String> actividade, int ffiscalorFiscal){
+        super(nif, email, nome, morada, password);
+        this.activ = new ArrayList<String>(actividade.size());
+        for(String i: actividade)
+            this.activ.add(i);
+        this.ffiscal = ffiscalorFiscal;
     }
+    
     public Empresa(Empresa i){
+        super(i);
         this.activ = i.getActiv();
-        this.fact = i.getFact();
+        this.ffiscal = i.getffiscal();
     }
-    public String[] getActiv(){
-        return this.activ;
+   
+    public ArrayList<String> getActiv(){
+        ArrayList<String> actividade = new ArrayList<String>(this.activ.size());
+        for(String s: this.activ)
+            actividade.add(s);
+        return actividade;
     }
-    public int getFact(){
-        return this.fact;
+    
+    public int getffiscal(){
+        return this.ffiscal;
     }
-    public void setActiv(String[] novoActiv){
-        this.activ = novoActiv;
+    
+    public void setactiv(ArrayList<String> novoactiv){
+        this.activ.clear();
+        this.activ = new ArrayList<String>(novoactiv.size());
+        for(String s: novoactiv)
+            this.activ.add(s);
     }
-    public void setFact(int novoFact){
-        this.fact = novoFact;
+    
+    public void setffiscal(int novoffiscal){
+        this.ffiscal = novoffiscal;
     }
+    
     public boolean equals (Object o){
         if(this==o) return true;
         if((o==null) || this.getClass() != o.getClass()) return false;
         Empresa i = (Empresa) o;
-        return this.activ == i.getActiv() &&
-                this.fact == i.getFact();
+        return  super.equals(o) &&
+                this.activ == i.getActiv() &&
+                this.ffiscal == i.getffiscal();
             }
     public Empresa clone(){
         return new Empresa(this);
