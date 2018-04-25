@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 
 public class Individual extends Entidade{
-    
     private int agregado;
     private ArrayList<Integer> nifAgregado;
     private float coef;
@@ -85,6 +84,18 @@ public class Individual extends Entidade{
                this.cod == i.getCod();
     }
     
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append(super.toString());
+        sb.append("Nr de pessoas no agregado: "+this.agregado+ "\n");
+        sb.append("NIF do agegado: " +this.nifAgregado+ "\n");
+        sb.append("Coeficiente fiscal: " +this.coef+ "\n");
+        
+        return sb.toString();
+    }
+   
     public Individual clone(){
         return new Individual(this);
     }

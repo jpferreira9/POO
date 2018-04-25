@@ -29,8 +29,7 @@ public class Entidade{
         this.morada = e.getMorada();
         this.password = e.getPassword();
     }
-    
-    
+
     public int getNif(){ 
         return this.nif; 
     }
@@ -71,21 +70,32 @@ public class Entidade{
         this.password = novaPass;
     }
     
-    
     public boolean equals (Object o){
         if(this == o)
             return true;
         if ( o == null || this.getClass() != o.getClass() )
             return false;
+        
         Entidade e = (Entidade) o;
         
         return this.nif == e.getNif() &&
-               this.email == e.getEmail() &&
-               this.nome == e.getNome() &&
-               this.morada == e.getMorada() &&
-               this.password == e.getPassword();      
+               this.email.equals(e.getEmail()) &&
+               this.nome.equals(e.getNome()) &&
+               this.morada.equals(e.getMorada()) &&
+               this.password.equals(e.getPassword());      
     }
     
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("NIF: " +this.nif+ "\n");
+        sb.append("Nome: "+this.nome+ "\n");
+        sb.append("Morada: " +this.morada+ "\n");
+        sb.append("Email: " +this.email+ "\n");
+        sb.append("Password: "+this.password+ "\n");
+        
+        return sb.toString();
+    }
     
     public Entidade clone(){
         return new Entidade(this);
