@@ -1,24 +1,83 @@
-public class Empresa extends Entidade{
-    private String[] activ;
-    private int fact;
+public class Empresa{
+    private int nif;
+    private String email;
+    private String nome;
+    private String morada;
+    private String password;
+    private String[] activ; // Atividades em que a empresa se enquadra
+    private int fact; // Factor p/ calculo fiscal
     
     public Empresa(){
+        this.nif=0;
+        this.email="ND";
+        this.nome="ND";
+        this.morada="ND";
+        this.password="";
         this.activ = new String[0];
         this.fact = 1;        
     }
-    public Empresa(String[] actividade, int factorFiscal){
+    public Empresa(int nif, String email, String nome, String morada, String password ,String[] actividade, int factorFiscal){
+        this.nif = nif;
+        this.email=email;
+        this.nome=nome;
+        this.morada=morada;
+        this.password=password;
         this.activ = actividade;
         this.fact = factorFiscal;
     }
     public Empresa(Empresa i){
+        this.nif = i.getNif();
+        this.email = i.getEmail();
+        this.nome = getNome();
+        this.morada = getMorada();
+        this.password = getPassword();
         this.activ = i.getActiv();
         this.fact = i.getFact();
+    }
+    public int getNif(){
+        return this.nif;
+    }
+    
+    public String getEmail(){
+        return this.email;
+    }
+    
+    public String getNome(){
+        return this.nome;
+    }
+    
+    public String getMorada(){
+        return this.morada;
+    }
+    
+    public String getPassword(){
+        return this.password;
     }
     public String[] getActiv(){
         return this.activ;
     }
     public int getFact(){
         return this.fact;
+    }
+    
+    public void setNif(int nif){
+        this.nif = nif;
+    }
+    
+    public void setEmail(String mail){
+        this.email = mail;
+    }
+    
+    public void setNome(String nome){
+        this.nome = nome;
+    }
+    
+    public void setPassword(String pw){
+        this.password = pw;
+    }
+    
+    public void setMorada(String morada){
+        this.morada = morada;
     }
     public void setActiv(String[] novoActiv){
         this.activ = novoActiv;
@@ -30,7 +89,12 @@ public class Empresa extends Entidade{
         if(this==o) return true;
         if((o==null) || this.getClass() != o.getClass()) return false;
         Empresa i = (Empresa) o;
-        return this.activ == i.getActiv() &&
+        return  this.nif == i.getNif() &&
+                this.email.equals(i.getEmail()) &&
+                this.nome.equals(i.getNome()) &&
+                this.morada.equals(i.getMorada()) &&
+                this.password.equals(i.getPassword()) &&
+                this.activ == i.getActiv() &&
                 this.fact == i.getFact();
             }
     public Empresa clone(){

@@ -1,33 +1,19 @@
+import java.util.*;
+import java.time.*;
 
-/**
- * Write a description of class Factura here.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
-public class Fatura
-{
-    // instance variables - replace the example below with your own
-    private int x;
-
-    /**
-     * Constructor for objects of class Factura
-     */
-    public Fatura()
-    {
-        // initialise instance variables
-        x = 0;
+public class Fatura{
+    public void imprime(){ //criar fatura de venda
     }
-
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    
+    public void editar(){ //associar/editar classificação de actividade
+    }
+    
+    public void lista(){//obter a listagem das faturas da empresa, ordenada por data ou valor
+    }
+    
+    public void cliente(){//obter a listagem das faturas de um cliente, ordenada por data ou valor
+    }
+    
+    public void total(){//total facturado por uma empresa num determinado período
     }
 }
