@@ -122,10 +122,10 @@ public class Gestao implements java.io.Serializable{
                     ativs.put(4,"Habitação");
                     break;
                 case 5:
-                    ativs.put(5,"");
+                    ativs.put(5,"Lares");
                     break;
                 case 6:
-                    ativs.put(6,"");
+                    ativs.put(6,"Passes Mensais");
                     break;
                 case 9:
                     ativP2();
@@ -140,8 +140,35 @@ public class Gestao implements java.io.Serializable{
     }
     public void ativP2(){
         menu.atividadesP2();
-        switch(in.nextInt()){
-            
+        while(true){
+            switch(in.nextInt()){
+                case 1:
+                    ativs.put(7,"Reparações Automóvel");
+                    break;
+                case 2:
+                    ativs.put(8,"Reparações Motorizadas");
+                    break;
+                case 3:
+                    ativs.put(9,"Restauração e Alojamento");
+                    break;
+                case 4:
+                    ativs.put(10,"Saúde");
+                    break;
+                case 5:
+                    ativs.put(11,"Veterinários");
+                    break;
+                case 6:
+                    ativs.put(12,"Outros");
+                    break;
+                case 9:
+                    ativP1();
+                    break;
+                case 0:
+                    return;
+                default:
+                    out("Opção inválida");
+                    break;
+            }
         }
     }
     
