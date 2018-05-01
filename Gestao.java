@@ -10,9 +10,10 @@ public class Gestao implements java.io.Serializable{
        
     Scanner in = new Scanner(System.in);
     
-    HashMap<Integer,String> ativs = new HashMap<Integer,String>();
+    ArrayList<String> ativs = new ArrayList<String>(0);
     HashMap<Integer,String> users =  new HashMap<Integer,String>();
     ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
+
     
     public void out(Object o){
         System.out.println(o.toString());
@@ -112,22 +113,22 @@ public class Gestao implements java.io.Serializable{
         while(true){
             switch(in.nextInt()){
                 case 1:
-                    ativs.put(1,"Cabeleireiros");                
+                    ativs.add(1,"Cabeleireiros");               
                     break;
                 case 2:
-                    ativs.put(2,"Despesas Familiares");
+                    ativs.add(2,"Despesas Familiares");
                     break;
                 case 3:
-                    ativs.put(3,"Educação");
+                    ativs.add(3,"Educação");
                     break;
                 case 4:
-                    ativs.put(4,"Habitação");
+                    ativs.add(4,"Habitação");
                     break;
                 case 5:
-                    ativs.put(5,"Lares");
+                    ativs.add(5,"Lares");
                     break;
                 case 6:
-                    ativs.put(6,"Passes Mensais");
+                    ativs.add(6,"Passes Mensais");
                     break;
                 case 9:
                     ativP2();
@@ -146,22 +147,22 @@ public class Gestao implements java.io.Serializable{
         while(true){
             switch(in.nextInt()){
                 case 1:
-                    ativs.put(7,"Reparações Automóvel");
+                    ativs.add(7,"Reparações Automóvel");
                     break;
                 case 2:
-                    ativs.put(8,"Reparações Motorizadas");
+                    ativs.add(8,"Reparações Motorizadas");
                     break;
                 case 3:
-                    ativs.put(9,"Restauração e Alojamento");
+                    ativs.add(9,"Restauração e Alojamento");
                     break;
                 case 4:
-                    ativs.put(10,"Saúde");
+                    ativs.add(10,"Saúde");
                     break;
                 case 5:
-                    ativs.put(11,"Veterinários");
+                    ativs.add(11,"Veterinários");
                     break;
                 case 6:
-                    ativs.put(12,"Outros");
+                    ativs.add(12,"Outros");
                     break;
                 case 9:
                     ativP1();
@@ -241,7 +242,7 @@ public class Gestao implements java.io.Serializable{
                                         else out("NIF inválido");
                                     }
                                     
-                                    Individual ind = new Individual(a,nome,email,morada,pw,depAgreg,nifAgregado,1,1);
+                                    ind = new Individual(a,nome,email,morada,pw,depAgreg,nifAgregado,1,1);
                                 }
                                 
                                 else { // DEFINIDO COMO EMPRESA
@@ -254,12 +255,9 @@ public class Gestao implements java.io.Serializable{
                                     out("\nIntroduza a sua morada");
                                     String morada = in.nextLine();
                                     in.nextLine();
-                                    out("\nIntroduza as atividades economicas");
-                                    ArrayList<String> ola = new ArrayList();
-                                    ola.add("ola");
-                                  
-
-                                   emp = new Empresa(a,nome,mail,morada,pw,ola,1);
+                                    ativP1(); ;
+                                    
+                                   emp = new Empresa(a,nome,mail,morada,pw,ativs,1);
                                 }
                                 out("\nRegisto efetuado");
                                 save(users);

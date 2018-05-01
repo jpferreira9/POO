@@ -74,14 +74,5 @@ public class Menu{
         out("\n\t3)RESET");
         
     }
-    public void criarFatura(){
-        clear();
-        out("\n\t NIF da empresa:");
-        out("\n\t1 Nome da empresa: ");
-        out("\n\t2 Data da despesa: ");
-        out("\n\t3 Nif do Cliente: ");
-        out("\n\t4 Breve descriçao da despesa: ");
-        out("\n\t5 Natureza da despesa: ");
-        out("\n\t6 Valor da despesa: ");
-    }
+
 }
