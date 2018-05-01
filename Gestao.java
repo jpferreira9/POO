@@ -105,6 +105,46 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    public void ativP1(){
+        menu.atividadesP1();
+        while(true){
+            switch(in.nextInt()){
+                case 1:
+                    ativs.put(1,"Cabeleireiros");                
+                    break;
+                case 2:
+                    ativs.put(2,"Despesas Familiares");
+                    break;
+                case 3:
+                    ativs.put(3,"Educação");
+                    break;
+                case 4:
+                    ativs.put(4,"Habitação");
+                    break;
+                case 5:
+                    ativs.put(5,"");
+                    break;
+                case 6:
+                    ativs.put(6,"");
+                    break;
+                case 9:
+                    ativP2();
+                    break;
+                case 0:
+                    return;
+                default:
+                    out("Opção inválida");
+                    break;
+            }
+        }
+    }
+    public void ativP2(){
+        menu.atividadesP2();
+        switch(in.nextInt()){
+            
+        }
+    }
+    
     public Gestao(){
             users.put(1234,"bolas");
             load();
@@ -169,7 +209,6 @@ public class Gestao implements java.io.Serializable{
                                         else out("NIF inválido");
                                     }
                                 }
-                                
                                 else { // DEFINIDO COMO EMPRESA
                                     out("\nIntroduza o nome da empresa");
                                     String nome = in.nextLine();
@@ -177,7 +216,7 @@ public class Gestao implements java.io.Serializable{
                                     String mail = in.nextLine();
                                     out("\nIntroduza a sua morada");
                                     String morada = in.nextLine();
-                                    out("\nIntroduza as atividades economicas");
+                                    ativP1();
                                     
                                 }
                                 out("\nRegisto efetuado");
@@ -188,17 +227,16 @@ public class Gestao implements java.io.Serializable{
                                 out("\nNIF já existe!");
                                 break;
                             }
-                            }
+                        }
                         else {
                             out("\nNIF inválido!");
                             break;
-                        }
-                       
+                        }                       
                     default:
                         out("\nOpção inválida!");
                         break;
                 }
-                                out("\nPrima qualquer nº para continuar, 0 para sair:");
+                out("\nPrima qualquer nº para continuar, 0 para sair:");
                 if(in.nextInt() == 0) return;
             }
         }
