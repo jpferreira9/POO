@@ -10,10 +10,9 @@ public class Gestao implements java.io.Serializable{
        
     Scanner in = new Scanner(System.in);
     
+    HashMap<Integer,String> ativs = new HashMap<Integer,String>();
     HashMap<Integer,String> users =  new HashMap<Integer,String>();
     ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
-    //HashMap<Integer,Individual> dadosI = new HashMap<Integer,Individual>();
-    //HashMap<Integer,Empresa> dadosE = new HashMap<Integer, Empresa>();
     
     public void out(Object o){
         System.out.println(o.toString());

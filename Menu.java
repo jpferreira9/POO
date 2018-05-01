@@ -24,6 +24,29 @@ public class Menu{
         out("\n\t2)Verificar dedução fiscal acumulada");
         // verificar o montante de dedução fiscal acumulado, por si e pelo agregado familiar;
     }
+    public void atividadesP1(){
+        clear();
+        out("Selecione a(s) atividade(s):");
+        out("\n\t1)Cabeleireiros");
+        out("\n\t2)Despesas Familiares");
+        out("\n\t3)Educação");
+        out("\n\t4)Habitação");
+        out("\n\t5)Lares");
+        out("\n\t6)Passes Mensais");
+        out("\n\t9)Página Seguinte ----->");
+        out("\n\t0)Sair");
+    }
+    public void atividadesP2(){
+        clear();
+        out("\n\t1)Reparação Automóvel");
+        out("\n\t2)Reparação Motorizadas");
+        out("\n\t3)Restauração & Alojamento");
+        out("\n\t4)Saúde");
+        out("\n\t5)Veterinários");
+        out("\n\t6)Outros");
+        out("\n\t9)<----- Página Anterior");
+        out("\n\t0)Sair");
+    }
     public void empresa(int nif){
         clear();
         out("\n\t Bem vindo\n\n\n\nEscolha a sua opção:");
