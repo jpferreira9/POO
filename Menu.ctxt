@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Menu
+comment1.params=
+comment1.target=void\ clear()
+comment2.params=o
+comment2.target=void\ out(java.lang.Object)
+comment3.params=
+comment3.target=void\ login()
+comment4.params=nif
+comment4.target=void\ individual(int)
+comment5.params=nif
+comment5.target=void\ empresa(int)
+comment6.params=
+comment6.target=void\ admin()
+numComments=7
