@@ -1,5 +1,4 @@
 import java.util.*;
-<<<<<<< HEAD
 import java.time.LocalDate;
 
 public class Fatura extends Empresa {
@@ -78,23 +77,5 @@ public class Fatura extends Empresa {
 
     public Fatura clone(){
         return new Fatura(this);
-=======
-import java.time.*;
-
-public class Fatura{
-    public void imprime(){ //criar fatura de venda
-    }
-    
-    public void editar(){ //associar/editar classificação de actividade
-    }
-    
-    public void lista(){//obter a listagem das faturas da empresa, ordenada por data ou valor
-    }
-    
-    public void cliente(){//obter a listagem das faturas de um cliente, ordenada por data ou valor
-    }
-    
-    public void total(){//total facturado por uma empresa num determinado período
->>>>>>> 80b5a65ca9d47f0f8869d8b03c7e21b9e133201f
     }
 }

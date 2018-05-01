@@ -1,19 +1,12 @@
-<<<<<<< HEAD
 import java.util.*;
 
-=======
->>>>>>> 80b5a65ca9d47f0f8869d8b03c7e21b9e133201f
 public class Empresa{
     private int nif;
     private String email;
     private String nome;
     private String morada;
     private String password;
-<<<<<<< HEAD
     ArrayList<String> activ; // Atividades em que a empresa se enquadra
-=======
-    private String[] activ; // Atividades em que a empresa se enquadra
->>>>>>> 80b5a65ca9d47f0f8869d8b03c7e21b9e133201f
     private int fact; // Factor p/ calculo fiscal
     
     public Empresa(){
@@ -22,17 +15,10 @@ public class Empresa{
         this.nome="ND";
         this.morada="ND";
         this.password="";
-<<<<<<< HEAD
         this.activ = new ArrayList<String>(0);
         this.fact = 1;        
     }
     public Empresa(int nif, String email, String nome, String morada, String password ,ArrayList<String> actividade, int factorFiscal){
-=======
-        this.activ = new String[0];
-        this.fact = 1;        
-    }
-    public Empresa(int nif, String email, String nome, String morada, String password ,String[] actividade, int factorFiscal){
->>>>>>> 80b5a65ca9d47f0f8869d8b03c7e21b9e133201f
         this.nif = nif;
         this.email=email;
         this.nome=nome;
@@ -69,11 +55,7 @@ public class Empresa{
     public String getPassword(){
         return this.password;
     }
-<<<<<<< HEAD
     public ArrayList<String> getActiv(){
-=======
-    public String[] getActiv(){
->>>>>>> 80b5a65ca9d47f0f8869d8b03c7e21b9e133201f
         return this.activ;
     }
     public int getFact(){
@@ -99,11 +81,7 @@ public class Empresa{
     public void setMorada(String morada){
         this.morada = morada;
     }
-<<<<<<< HEAD
     public void setActiv(ArrayList<String> novoActiv){
-=======
-    public void setActiv(String[] novoActiv){
->>>>>>> 80b5a65ca9d47f0f8869d8b03c7e21b9e133201f
         this.activ = novoActiv;
     }
     public void setFact(int novoFact){
