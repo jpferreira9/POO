@@ -243,8 +243,7 @@ public class Gestao implements java.io.Serializable{
                                     String mail = in.nextLine();
                                     out("\nIntroduza a sua morada");
                                     String morada = in.nextLine();
-                                    ativP1();
-                                    
+                                    ativP1();                                    
                                 }
                                 out("\nRegisto efetuado");
                                 save(users);
