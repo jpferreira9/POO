@@ -10,12 +10,18 @@ public class Gestao implements java.io.Serializable{
        
     Scanner in = new Scanner(System.in);
     
+    HashMap<Integer,String> ativs = new HashMap<Integer,String>();
     HashMap<Integer,String> users =  new HashMap<Integer,String>();
-    //HashMap<Integer,Individual> dadosI = new HashMap<Integer,Individual>();
-    //HashMap<Integer,Empresa> dadosE = new HashMap<Integer, Empresa>();
+    ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
     
     public void out(Object o){
         System.out.println(o.toString());
+    }
+    
+    public boolean nifValido(int x){
+        int z = x/100000000;
+        if(x == 1234 || (z > 0.9 && z < 10 && (z < 3|| z >= 5 || z < 7 || z >= 8))) return true;
+        else return false;
     }
     
     public void admin(){
@@ -66,8 +72,8 @@ public class Gestao implements java.io.Serializable{
             menu.empresa(x);
             switch(in.nextInt()){
                 case 1:
-                    out("CRIAR FATURA DE VENDA");
-                    fat.imprime();
+                    out("CRIAR FATURA DE VENDA:");
+                    emp.criarFatura();
                     break;
                 
                 case 2:
@@ -101,10 +107,75 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+        public void ativP1(){
+        menu.atividadesP1();
+        while(true){
+            switch(in.nextInt()){
+                case 1:
+                    ativs.put(1,"Cabeleireiros");                
+                    break;
+                case 2:
+                    ativs.put(2,"Despesas Familiares");
+                    break;
+                case 3:
+                    ativs.put(3,"Educação");
+                    break;
+                case 4:
+                    ativs.put(4,"Habitação");
+                    break;
+                case 5:
+                    ativs.put(5,"Lares");
+                    break;
+                case 6:
+                    ativs.put(6,"Passes Mensais");
+                    break;
+                case 9:
+                    ativP2();
+                    break;
+                case 0:
+                    return;
+                default:
+                    out("Opção inválida");
+                    break;
+            }
+        }
+    }
+        
+    public void ativP2(){
+        menu.atividadesP2();
+        while(true){
+            switch(in.nextInt()){
+                case 1:
+                    ativs.put(7,"Reparações Automóvel");
+                    break;
+                case 2:
+                    ativs.put(8,"Reparações Motorizadas");
+                    break;
+                case 3:
+                    ativs.put(9,"Restauração e Alojamento");
+                    break;
+                case 4:
+                    ativs.put(10,"Saúde");
+                    break;
+                case 5:
+                    ativs.put(11,"Veterinários");
+                    break;
+                case 6:
+                    ativs.put(12,"Outros");
+                    break;
+                case 9:
+                    ativP1();
+                    break;
+                case 0:
+                    return;
+                default:
+                    out("Opção inválida");
+                    break;
+            }
+        }
+    }
     public Gestao(){
             users.put(1234,"bolas");
-            users.put(123456789,"teste");
-            users.put(987654321,"teste");
             load();
             while(true){    
                 menu.login();                     
@@ -112,15 +183,14 @@ public class Gestao implements java.io.Serializable{
                     case 1: // Login de utilizador 
                         out("\nIntroduza NIF: ");
                         int a = in.nextInt();
-                        int z = a/100000000;
-                        if(a == 1234 || (z > 0.9 && z < 10 && (z < 3|| z >= 5 || z < 7 || z >= 8))){
+                        if(nifValido(a)==true){
                             if(users.containsKey(a) == true){
                                out("\nIntroduza password: ");
                                String pw = in.next();
                                if(users.get(a).equals(pw)){
                                    if(a == 1234) admin();
-                                   else if(z < 3) individual(a);
-                                   else if(z > 3) empresa(a);
+                                   else if(a < 300000000) individual(a);
+                                   else if(a > 300000000) empresa(a);
                                }
                                else {
                                    out("\nPassword incorrecta!");
@@ -140,10 +210,9 @@ public class Gestao implements java.io.Serializable{
                     case 2: // Registar Utilizador
                         out("\nIntroduza NIF: ");
                         a = in.nextInt();
-                        z = a/100000000;
-                        if(z > 0.9 && z < 10 && (z < 3|| z >= 5 || z < 7 || z >= 8)){
+                        if(nifValido(a)==true){
                             boolean tipoI;
-                            if(z<3)tipoI = true;
+                            if(a<300000000)tipoI = true;
                             else tipoI = false;
                             boolean check = users.containsKey(a);
                             if(check == false) {
@@ -152,17 +221,45 @@ public class Gestao implements java.io.Serializable{
                                 users.put(a,pw);
                                 if(tipoI){ // DEFINIDO COMO INDIVIDUAL
                                     out("\nIntroduza o seu nome");
+                                    String nome = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza o seu e-mail");
+                                    String email = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza a sua morada");
+                                    String morada = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza o numero de dependentes do agregado familiar");
+                                    int depAgreg = in.nextInt();
                                     out("Introduza os NIFs do agregado familiar");
+                                    while(depAgreg > 0){
+                                        int y = in.nextInt();
+                                        if(nifValido(y)==true){
+                                            nifAgregado.add(y);
+                                            depAgreg--;
+                                        }
+                                        else out("NIF inválido");
+                                    }
+                                    
+                                    Individual ind = new Individual(a,nome,email,morada,pw,depAgreg,nifAgregado,1,1);
                                 }
                                 
                                 else { // DEFINIDO COMO EMPRESA
                                     out("\nIntroduza o nome da empresa");
+                                    String nome = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza o seu e-mail");
+                                    String mail = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza a sua morada");
+                                    String morada = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza as atividades economicas");
+                                    ArrayList<String> ola = new ArrayList();
+                                    ola.add("ola");
+                                  
+
+                                   emp = new Empresa(a,nome,mail,morada,pw,ola,1);
                                 }
                                 out("\nRegisto efetuado");
                                 save(users);
@@ -201,6 +298,7 @@ public class Gestao implements java.io.Serializable{
         }
         catch(Exception e){}
     }
+    
     public void load(){//ler o estado da aplicacao em ficheiro        
         try{
             File toRead = new File("userList");
@@ -211,18 +309,16 @@ public class Gestao implements java.io.Serializable{
             
             ois.close();
             fis.close();
-            /* PRINT HASHMAP GUARDADO
-            for(Map.Entry<Integer,String> u : users.entrySet()){
-                out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
-            }*/
         }
         catch(Exception e){}
     }
+    
     public void testPrint(HashMap<Integer,String> users){
         for(Map.Entry<Integer,String> u : users.entrySet()){
                 out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
             }
     }
+    
     public void reset(){//limpar o ficheiro
         File userList = new File("userList");
         userList.delete();
