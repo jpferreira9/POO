@@ -38,6 +38,7 @@ public class Menu{
     }
     public void atividadesP2(){
         clear();
+        out("Selecione a(s) atividade(s):");
         out("\n\t1)Reparação Automóvel");
         out("\n\t2)Reparação Motorizadas");
         out("\n\t3)Restauração & Alojamento");

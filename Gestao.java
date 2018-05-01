@@ -37,8 +37,13 @@ public class Gestao implements java.io.Serializable{
                     
                case 3:
                     out("\nLIMPAR DADOS?");
+                    out("\nIntroduza 1 para confirmar");
                     if(in.nextInt()==1)reset();
                     break;
+                    
+               case 0:
+                    return;
+                    
                default:
                     out("\nOPCAO INVALIDA!");
                     break;
@@ -219,7 +224,8 @@ public class Gestao implements java.io.Serializable{
                                 users.put(a,pw);
                                 if(tipoI){ // DEFINIDO COMO INDIVIDUAL
                                     out("\nIntroduza o seu nome");
-                                    String nome = in.nextLine();
+                                    String nom = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza o seu e-mail");
                                     String mail = in.nextLine();
                                     out("\nIntroduza a sua morada");
@@ -239,13 +245,14 @@ public class Gestao implements java.io.Serializable{
                                 else { // DEFINIDO COMO EMPRESA
                                     out("\nIntroduza o nome da empresa");
                                     String nome = in.nextLine();
+                                    in.nextLine();
                                     out("\nIntroduza o seu e-mail");
                                     String mail = in.nextLine();
                                     out("\nIntroduza a sua morada");
                                     String morada = in.nextLine();
                                     ativP1();                                    
                                 }
-                                out("\nRegisto efetuado");
+                                out("\n\t\t***Registo efetuado***\n\n");
                                 save(users);
                                 break;
                                 }
@@ -277,9 +284,9 @@ public class Gestao implements java.io.Serializable{
             oos.flush();
             oos.close();
             fos.close();
-            out("Ficheiro guardado");
+            out("Ficheiro guardado com sucesso");
         }
-        catch(Exception e){}
+        catch(Exception e){out("Erro a guardar ficheiro");}
     }
     public void load(){//ler o estado da aplicacao em ficheiro        
         try{
@@ -292,10 +299,10 @@ public class Gestao implements java.io.Serializable{
             ois.close();
             fis.close();
         }
-        catch(Exception e){}
+        catch(Exception e){out("Erro a abrir ficheiro");}
     }
-    public void testPrint(HashMap<Integer,String> users){
-        for(Map.Entry<Integer,String> u : users.entrySet()){
+    public void testPrint(HashMap<Integer,String> map){
+        for(Map.Entry<Integer,String> u : map.entrySet()){
                 out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
             }
     }
