@@ -1,21 +1,32 @@
 import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.*;
+import java.io.*;
+import java.time.*;
 
-public class Empresa extends Entidade{
+public class Empresa extends Entidade implements Serializable{
+    Menu menu = new Menu();
+    Fatura fat = new Fatura();
     private ArrayList<String> activ;
     private int ffiscal;
+    Scanner in = new Scanner(System.in);
+    
     
     public Empresa(){
         super();
         this.activ = new ArrayList<String>(0);
-        this.ffiscal = 1;
+        this.ffiscal = 1;        
     }
     
-    public Empresa(int nif, String email, String nome, String morada, String pass, ArrayList<String> actividade, int ffiscalorFiscal){
-        super(nif, email, nome, morada, pass);
+    public Empresa(int nif, String email, String nome, String morada, String password,ArrayList<String> actividade, int ffiscalorFiscal){
+        super(nif, email, nome, morada, password);
+        this.activ = new ArrayList<String>(actividade.size());
+        for(String i: actividade)
+            this.activ.add(i);
         this.ffiscal = ffiscalorFiscal;
     }
     
-    public Empresa(Empresa e){
+        public Empresa(Empresa e){
         super(e);
         this.activ = e.getActiv();
         this.ffiscal = e.getFFiscal();
@@ -62,6 +73,44 @@ public class Empresa extends Entidade{
         return new Empresa(this);
     }
     
+    public void out(Object o){
+        System.out.println(o.toString());
+    }
     
-}
+    public void criarFatura(){
+        Scanner in = new Scanner(System.in);
+        LocalDate now = LocalDate.now();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: ");
+        int nifCliente = in.nextInt();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: ");
+        String descriçao = in.next();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: "+descriçao);
+        out("\n\t5 Natureza da despesa: " +this.getActiv());
+        out("\n\t6 Valor da despesa: ");
+        double valor = in.nextDouble();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: "+descriçao);
+        out("\n\t5 Natureza da despesa: " +this.getActiv());
+        out("\n\t6 Valor da despesa: " +valor);
         
+        Fatura fat = new Fatura(this.getNif(),this.getNome(),now,nifCliente,descriçao,valor);
+    }
+}

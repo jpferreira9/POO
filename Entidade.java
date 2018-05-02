@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Entidade{
+public class Entidade implements Serializable { 
     private int nif;
     private String email;
     private String nome;
@@ -29,7 +30,8 @@ public class Entidade{
         this.morada = e.getMorada();
         this.password = e.getPassword();
     }
-
+    
+    
     public int getNif(){ 
         return this.nif; 
     }
@@ -70,12 +72,12 @@ public class Entidade{
         this.password = novaPass;
     }
     
+    
     public boolean equals (Object o){
         if(this == o)
             return true;
         if ( o == null || this.getClass() != o.getClass() )
             return false;
-        
         Entidade e = (Entidade) o;
         
         return this.nif == e.getNif() &&
@@ -88,14 +90,20 @@ public class Entidade{
     public String toString(){
         StringBuilder sb = new StringBuilder();
         
-        sb.append("NIF: " +this.nif+ "\n");
-        sb.append("Nome: "+this.nome+ "\n");
-        sb.append("Morada: " +this.morada+ "\n");
-        sb.append("Email: " +this.email+ "\n");
-        sb.append("Password: "+this.password+ "\n");
+        sb.append("NIF: ");
+        sb.append(this.nif+"\n");
+        sb.append("Email: ");
+        sb.append(this.email+"\n");
+        sb.append("Nome: ");
+        sb.append(this.nome+"\n");
+        sb.append("Morada: ");
+        sb.append(this.morada+"\n");
+        sb.append("Password: ");
+        sb.append(this.password+"\n");
         
         return sb.toString();
     }
+    
     
     public Entidade clone(){
         return new Entidade(this);
