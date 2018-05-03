@@ -21,7 +21,6 @@ public class Individual extends Entidade{
         this.agregado = agreg;
         this.coef = coef;
         this.cod = cod;
-        this.nifAgregado.clear();
         this.nifAgregado = new ArrayList<Integer>(na.size());
         for(Integer i: na)
             this.nifAgregado.add(i);

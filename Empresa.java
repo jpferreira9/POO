@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Scanner;
 
 public class Empresa extends Entidade{
     private ArrayList<String> activ;
@@ -10,8 +12,8 @@ public class Empresa extends Entidade{
         this.ffiscal = 1;
     }
     
-    public Empresa(int nif, String email, String nome, String morada, String pass, ArrayList<String> actividade, int ffiscalorFiscal){
-        super(nif, email, nome, morada, pass);
+    public Empresa(int nif, String pass, String nome, String email,  String morada,  ArrayList<String> actividade, int ffiscalorFiscal){
+        super(nif, pass, nome, email, morada);
         this.ffiscal = ffiscalorFiscal;
     }
     
@@ -62,6 +64,23 @@ public class Empresa extends Entidade{
         return new Empresa(this);
     }
     
-    
+    public ArrayList<Fatura> criarFatura(ArrayList<Fatura> listaFaturas){
+        
+        LocalDate now = LocalDate.now();
+        Scanner input = new Scanner(System.in);
+        
+        System.out.println("NIF do cliente");
+        int nifCliente = input.nextInt();
+        System.out.println("Descricao da fatura");
+        String descricao = input.nextLine();
+        descricao = input.nextLine();
+        System.out.println("Valor da fatura");
+        double valor = input.nextDouble();
+        
+        Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, valor);
+        listaFaturas.add(fat);
+        
+        return listaFaturas;
+    }
 }
         

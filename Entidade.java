@@ -8,67 +8,47 @@ public class Entidade{
 
     public Entidade(){
         this.nif = 0;
-        this.email = "";
-        this.nome = "";
-        this.morada = "";
         this.password = "";
+        this.nome = "";
+        this.email = "";
+        this.morada = "";
     }
     
-    public Entidade (int nif, String email, String nome, String morada, String pass){
+    public Entidade (int nif, String pass, String nome, String email, String morada){
         this.nif = nif;
-        this.email = email;
-        this.nome = nome;
-        this.morada = morada;
         this.password = pass;
+        this.nome = nome;
+        this.email = email;
+        this.morada = morada;
     }
     
     public Entidade (Entidade e){
         this.nif = e.getNif();
-        this.email = e.getEmail();
-        this.nome = e.getNome();
-        this.morada = e.getMorada();
         this.password = e.getPassword();
+        this.nome = e.getNome();
+        this.email = e.getEmail();
+        this.morada = e.getMorada();
     }
 
-    public int getNif(){ 
-        return this.nif; 
-    }
+    public int getNif(){ return this.nif; }
     
-    public  String getEmail(){
-        return this.email;
-    }
+    public String getPassword(){ return this.password; }
     
-    public String getNome(){
-        return this.nome;
-    }
+    public String getNome(){ return this.nome; }
     
-    public String getMorada(){
-        return this.morada;
-    }
+    public  String getEmail(){ return this.email; }
     
-    public String getPassword(){
-        return this.password;
-    }
+    public String getMorada(){ return this.morada; }
     
-    public void setNif (int novoNif){
-        this.nif = novoNif;
-    }
+    public void setNif (int novoNif){ this.nif = novoNif; }
     
-    public void setEmail (String novoEmail){
-        this.email = novoEmail;
-    }
+    public void setEmail (String novoEmail){ this.email = novoEmail; }
     
-    public void setNome (String novoNome){
-        this.nome = novoNome;
-    }
+    public void setNome (String novoNome){ this.nome = novoNome; }
     
-    public void setMorada (String novaMorada){
-        this.morada = novaMorada;
-    }
+    public void setMorada (String novaMorada){ this.morada = novaMorada; }
     
-    public void setPassword (String novaPass){
-        this.password = novaPass;
-    }
+    public void setPassword (String novaPass){ this.password = novaPass; }
     
     public boolean equals (Object o){
         if(this == o)
