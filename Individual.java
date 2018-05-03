@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
+
 public class Individual extends Entidade{
-    
     private int agregado;
     private ArrayList<Integer> nifAgregado;
     private float coef;
@@ -15,12 +15,12 @@ public class Individual extends Entidade{
         this.cod = 0;
     }
     
+    
     public Individual (int nif, String email, String nome, String morada, String password ,int agreg , ArrayList<Integer> na, float coef, int cod){
         super(nif, email, nome, morada, password);
         this.agregado = agreg;
         this.coef = coef;
         this.cod = cod;
-        this.nifAgregado.clear();
         this.nifAgregado = new ArrayList<Integer>(na.size());
         for(Integer i: na)
             this.nifAgregado.add(i);
@@ -83,6 +83,7 @@ public class Individual extends Entidade{
                this.cod == i.getCod();
     }
     
+
     public String toString(){
         StringBuilder sb = new StringBuilder();
         
@@ -98,3 +99,6 @@ public class Individual extends Entidade{
         return new Individual(this);
     }
 }
+        
+    
+

@@ -9,19 +9,74 @@ public class Gestao implements java.io.Serializable{
     Menu menu = new Menu();
        
     Scanner in = new Scanner(System.in);
-    
 
     HashMap<Integer,String> users =  new HashMap<Integer,String>();
-    ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
+    HashMap<Integer,Empresa> dadosEmp = new HashMap<Integer,Empresa>();
+    HashMap<Integer,Individual> dadosInd = new HashMap<Integer, Individual>();
+    
+    boolean end = false;
     
     public void out(Object o){
         System.out.println(o.toString());
     }
+    
     public boolean nifValido(int x){
         int z = x/100000000;
         if(x == 1234 || (z > 0.9 && z < 10 && (z < 3|| z >= 5 || z < 7 || z >= 8))) return true;
         else return false;
     }
+    
+    public void limparDados(){
+        while(true){
+            menu.limpaDados();
+            switch(in.nextInt()){
+                case 1:
+                    out("\nDe certeza que pretende eliminar todos os dados (s/n)");
+                    if(in.next().equals("s")){
+                        resetUsers();
+                        resetEmp();
+                        resetIndiv();
+                        menu.clear();
+                        out("\n\n\n\t\t\t********** Dados eliminados! **********");
+                        menu.pausar();
+                    }
+                    else{
+                        menu.clear();
+                        out("\n\n\tNenhuma alterçao efetuada");
+                        menu.pausar();
+                    }
+                    return;
+                    
+                case 2:
+                    out("\nDe certeza que pretende eliminar os dados Individuais (s/n)");
+                    if(in.next().equals("s")){
+                        resetIndiv();
+                        menu.clear();
+                        out("\n\n\n\t\t\t********** Dados eliminados! **********");
+                        menu.pausar();
+                    }
+                    return;
+                    
+                case 3:
+                    out("\nDe certeza que pretende eliminar os dados das Empresas (s/n)");
+                    if(in.next().equals("s")){
+                        resetEmp();
+                        menu.clear();
+                        out("\n\n\n\t\t\t********** Dados eliminados! **********");
+                        menu.pausar();
+                    }
+                    return;
+                
+                case 0:
+                    return;
+                    
+                default:
+                    out("\nOPCAO INVALIDA!");
+                    break;    
+            }
+        }
+    }
+    
     public void admin(){
        while(true){ 
             menu.admin();
@@ -36,9 +91,7 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                case 3:
-                    out("\nLIMPAR DADOS?");
-                    out("\nIntroduza 1 para confirmar");
-                    if(in.nextInt()==1)reset();
+                    limparDados();
                     break;
                     
                case 0:
@@ -61,7 +114,13 @@ public class Gestao implements java.io.Serializable{
                 
                 case 2:
                     out("\nDEDUCAO FISCAL ACUMULADA:");
+                    
+                    out("\n\t"+dadosInd.get(x).getCoef());
+                    in.nextInt();
                     break;
+                
+                case 0:
+                    return;
                     
                 default:
                     out("\nOPCAO INVALIDA!");
@@ -76,7 +135,7 @@ public class Gestao implements java.io.Serializable{
             switch(in.nextInt()){
                 case 1:
                     out("CRIAR FATURA DE VENDA");
-                    fat.imprime();
+                    dadosEmp.get(x).criarFatura();
                     break;
                 
                 case 2:
@@ -107,12 +166,13 @@ public class Gestao implements java.io.Serializable{
                     menu.clear();
                     out("\nLISTA DAS ATIVIDADES DA EMPRESA");
                     
-                    ArrayList<String> ativs = new ArrayList<String>();
                     
-                    for(String a: ativs)
-                        out("\n" +a);
+                    
                     out("\n\n\n\n\n\t\tPRIMA QUALQUER NUMERO PARA VOLTAR ATRAS");
                     in.nextInt();
+                    
+                case 0:
+                    return;
                     
                 default:
                     out("\nOPCAO INVALIDA");
@@ -188,9 +248,14 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Login e Registo de Entidades
+     */
     public Gestao(){
             users.put(1234,"bolas");
-            load();
+            loadUsers();
+            loadIndividual();
+            loadEmpresa();
             while(true){    
                 menu.login();                     
                 switch(in.nextInt()){
@@ -202,9 +267,21 @@ public class Gestao implements java.io.Serializable{
                                out("\nIntroduza password: ");
                                String pw = in.next();
                                if(users.get(a).equals(pw)){
-                                   if(a == 1234) admin();
-                                   else if(a < 300000000) individual(a);
-                                   else if(a > 300000000) empresa(a);
+                                   if(a == 1234){
+                                       admin();
+                                       menu.sair();
+                                       return;
+                                    }
+                                   else if(a < 300000000){
+                                       individual(a);
+                                       menu.sair();
+                                       return;
+                                    }
+                                   else if(a > 300000000){ 
+                                       empresa(a);
+                                       menu.sair();
+                                       return;
+                                    }
                                }
                                else {
                                    out("\nPassword incorrecta!");
@@ -244,14 +321,26 @@ public class Gestao implements java.io.Serializable{
                                     out("\nIntroduza o numero de dependentes do agregado familiar");
                                     int depAgreg = in.nextInt();
                                     out("Introduza os NIFs do agregado familiar");
+                                    
+                                    ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
+                                    float coef = 1;
                                     while(depAgreg > 0){
                                         int y = in.nextInt();
                                         if(nifValido(y)==true){
                                             nifAgregado.add(y);
                                             depAgreg--;
+                                            if(users.containsKey(y))
+                                                coef += 1;
+                                            else coef += 0.3;
                                         }
                                         else out("NIF inválido");
                                     }
+                                    
+                                    Individual indiv = new Individual(a,pw,nom,mail,morada,depAgreg,nifAgregado,coef,1);
+                                    
+                                    dadosInd.put(a,indiv);
+                                    saveIndividual(dadosInd);
+                                    
                                 }
                                 else { // DEFINIDO COMO EMPRESA
                                     out("\nIntroduza o nome da empresa");
@@ -266,9 +355,12 @@ public class Gestao implements java.io.Serializable{
                                     ativP1(ativs);
                                     
                                     emp = new Empresa(a,pw, nome, mail, morada, ativs ,1);
+                                    
+                                    dadosEmp.put(a,emp);
+                                    saveEmpresa(dadosEmp);
                                 }
                                 out("\n\t\t***Registo efetuado***\n\n");
-                                save(users);
+                                saveUsers(users);
                                 break;
                                 }
                             else{
@@ -287,27 +379,34 @@ public class Gestao implements java.io.Serializable{
                 out("\nPrima qualquer nº para continuar, 0 para sair:");
                 if(in.nextInt() == 0) return;
             }
+            
         }
     
-    public void save(HashMap<Integer,String> users){ //gravar o estado da aplicação em ficheiro, para que seja possível retomar mais tarde a execução   
+    /**
+     * Gravar os utilizadores criados em ficheiro,
+     * para que seja possível retomar mais tarde a execução
+     */
+        
+    public void saveUsers(HashMap<Integer,String> utilizadores){   
         try{
             File userList = new File("userList");
             FileOutputStream fos = new FileOutputStream(userList);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             
-            oos.writeObject(users);
+            oos.writeObject(utilizadores);
             oos.flush();
             oos.close();
             fos.close();
             out("Ficheiro guardado com sucesso");
         }
-        catch(Exception e){out("Erro a guardar ficheiro");}
+        catch(Exception e){out("Erro ao guardar ficheiro");}
     }
     
     /**
-     *  ler o estado da aplicacao em ficheiro
+     * Ler os utilizadores em ficheiro
      */
-    public void load(){        
+    
+    public void loadUsers(){        
         try{
             File toRead = new File("userList");
             FileInputStream fis=new FileInputStream(toRead);
@@ -318,17 +417,118 @@ public class Gestao implements java.io.Serializable{
             ois.close();
             fis.close();
         }
-        catch(Exception e){out("Erro a abrir ficheiro");}
+        catch(Exception e){out("Erro ao abrir ficheiro");}
     }
+    
+    /**
+     * Apagar dados para login de utilizadores
+     */
+    
+    public void resetUsers(){
+        File userList = new File("userList");
+        userList.delete();
+    }
+    
+     /**
+     * Gravar os dados dos NIF's Individuais criados em ficheiro,
+     * para que seja possível retomar mais tarde a execução
+     */
+        
+    public void saveIndividual(HashMap<Integer,Individual> indiv){   
+        try{
+            File indivList = new File("indivList");
+            FileOutputStream fos = new FileOutputStream(indivList);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            
+            oos.writeObject(indiv);
+            oos.flush();
+            oos.close();
+            fos.close();
+            out("Ficheiro guardado com sucesso");
+        }
+        catch(Exception e){out("Erro ao guardar ficheiro");}
+    }
+    
+    /**
+     * Ler os dados do Individuais em ficheiro
+     */
+    
+    public void loadIndividual(){        
+        try{
+            File toRead = new File("indivList");
+            FileInputStream fis=new FileInputStream(toRead);
+            ObjectInputStream ois=new ObjectInputStream(fis);
+            
+            dadosInd = (HashMap<Integer,Individual>)ois.readObject();
+            
+            ois.close();
+            fis.close();
+        }
+        catch(Exception e){out("Erro ao abrir ficheiro");}
+    }
+    
+    /**
+     * Apagar dados dos Individuais
+     */
+    
+    public void resetIndiv(){
+        File indivList = new File("indivList");
+        indivList.delete();
+    }
+    
+     /**
+     * Gravar os dados dos NIF's de Empresas criadas em ficheiro,
+     * para que seja possível retomar mais tarde a execução
+     */
+        
+    public void saveEmpresa(HashMap<Integer,Empresa> empresa){   
+        try{
+            File empList = new File("empList");
+            FileOutputStream fos = new FileOutputStream(empList);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            
+            oos.writeObject(empresa);
+            oos.flush();
+            oos.close();
+            fos.close();
+            out("Ficheiro guardado com sucesso");
+        }
+        catch(Exception e){out("Erro ao guardar ficheiro");}
+    }
+    
+    /**
+     * Ler os dados das Empresas em ficheiro
+     */
+    
+    public void loadEmpresa(){        
+        try{
+            File toRead = new File("empList");
+            FileInputStream fis=new FileInputStream(toRead);
+            ObjectInputStream ois=new ObjectInputStream(fis);
+            
+            dadosEmp = (HashMap<Integer,Empresa>)ois.readObject();
+            
+            ois.close();
+            fis.close();
+        }
+        catch(Exception e){out("Erro ao abrir ficheiro");}
+    }
+    
+    /**
+     * Apagar dados das Empresas
+     */
+    
+    public void resetEmp(){
+        File empList = new File("empList");
+        empList.delete();
+    }
+    
     public void testPrint(HashMap<Integer,String> map){
         for(Map.Entry<Integer,String> u : map.entrySet()){
                 out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
             }
     }
-    public void reset(){//limpar o ficheiro
-        File userList = new File("userList");
-        userList.delete();
-    }
+
     
     public static void main(String[] args){        
         new Gestao();
