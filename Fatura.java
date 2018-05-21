@@ -19,8 +19,8 @@ public class Fatura{
     }
     
     public Fatura(int nif, String designaçao, LocalDate data, int nifCliente, String descriçao, double valor){
-        this.setNIFEmitente(nif);
-        this.setDEmitente(designaçao);
+        this.nifEmitente = nif;
+        this.desigEmitente = designaçao;
         this.data = data;
         this.nifCliente = nifCliente;
         this.descriçao = descriçao;
@@ -52,9 +52,9 @@ public class Fatura{
     
     public void setDEmitente(String novaDesig){ this.desigEmitente = novaDesig; }
     
-    public void setData(LocalDate data){ this.data = data; }
+    public void setData(LocalDate novaData){ this.data = novaData; }
     
-    public void setNIFCliente(int nifCLiente){ this.nifCliente = nifCliente; }
+    public void setNIFCliente(int novoCliente){ this.nifCliente = novoCliente; }
     
     public void setDescriçao(String descriçao){ this.descriçao = descriçao; }
     

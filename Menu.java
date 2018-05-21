@@ -12,7 +12,7 @@ public class Menu{
     
     public void login(){
         clear();
-        out("\n\t\t####### Bem vindo ao JavaFactura\n\n\n\nEscolha a sua opção: #######");
+        out("\n\t ####### Bem vindo #######\n\n\n\nEscolha a sua opção: ");
         out("\n\t1) Fazer login"); 
         //FEITO validar o acesso à aplicação utilizando as credenciais (nif e password)
         out("\n\t2) Registar um novo utilizador"); 
@@ -82,7 +82,10 @@ public class Menu{
         out("\n\t2) Verificar as X empresas com maior nº de faturas e as suas deduções fiscais");
         /* determinar a relação das X empresas que mais facturas em todo o sistema e o montante de deduções 
          fiscais que as despesas registadas (dessas empresas) representam*/
-        out("\n\t3) Limpar dados");
+        out("\n\t3) Ver NIF's registados");
+        out("\n\t4) Ver empresas registadas");
+        out("\n\t5) Ver individuais registados");
+        out("\n\t7) Limpar dados");
         out("\n\n\t0) Sair");
     }
     

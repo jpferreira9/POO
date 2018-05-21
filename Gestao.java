@@ -13,8 +13,8 @@ public class Gestao implements java.io.Serializable{
     HashMap<Integer,String> users =  new HashMap<Integer,String>();
     HashMap<Integer,Empresa> dadosEmp = new HashMap<Integer,Empresa>();
     HashMap<Integer,Individual> dadosInd = new HashMap<Integer, Individual>();
-    
-    boolean end = false;
+    ArrayList<Fatura> listaFaturas = new ArrayList<Fatura>();
+
     
     public void out(Object o){
         System.out.println(o.toString());
@@ -82,15 +82,36 @@ public class Gestao implements java.io.Serializable{
             menu.admin();
             switch(in.nextInt()){
                case 1:
-                    out("\nOS 10 CONTRIBUINTES COM MAIS DESPESAS:");
+                    out("\n\tOs 10 Contribuintes com mais despesas:");
                     break;
                
                case 2:
-                    out("\nQUANTAS EMPRESAS?");
+                    out("\n\tQUANTAS EMPRESAS?");
                     int num = in.nextInt();
                     break;
                     
                case 3:
+                    menu.clear();
+                    out("\n\tUtilizadores registados:\n");
+                    mapPrint(users);
+                    in.nextInt();
+                    break;
+                    
+               case 4:
+                    menu.clear();
+                    out("\n\tEmpresas Registadas:\n");
+                    System.out.println(dadosEmp.toString());
+                    in.nextInt();
+                    break;
+                    
+               case 5:
+                    menu.clear();
+                    out("\n\tIndividuais Registados:\n");
+                    System.out.println(dadosInd.toString());
+                    in.nextInt();
+                    break;
+                    
+               case 7:
                     limparDados();
                     break;
                     
@@ -114,7 +135,7 @@ public class Gestao implements java.io.Serializable{
                 
                 case 2:
                     out("\nDEDUCAO FISCAL ACUMULADA:");
-                    
+                    //ver se realmente e isto
                     out("\n\t"+dadosInd.get(x).getCoef());
                     in.nextInt();
                     break;
@@ -132,10 +153,14 @@ public class Gestao implements java.io.Serializable{
     public void empresa(int x){
         while(true){         
             menu.empresa(x);
+                System.out.println(x);
+                System.out.println(dadosEmp.toString());
             switch(in.nextInt()){
+
                 case 1:
-                    out("CRIAR FATURA DE VENDA");
-                    dadosEmp.get(x).criarFatura();
+                    out("Fatura de venda");
+                    dadosEmp.get(x).criarFatura(listaFaturas);
+                    in.nextInt();
                     break;
                 
                 case 2:
@@ -144,32 +169,33 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                 case 3:
-                    out("\nLISTA DE FATURAS:");
+                    out("\nLista de faturas:");
                     fat.lista();
                     break;
                     
                 case 4:
                     out("\nINTRODUZIR NUMERO CONTRIBUINTE");
                     
-                    out("\nINTRODUZIR DATA:");
+                    out("\nIntroduzir data:");
                     fat.cliente();
                     break;
                     
                 case 5:
                     out("\nINTRODUZIR DATA:");
                     
-                    out("\nTOTAL FATURADO:");
+                    out("\nTotal faturado:");
                     fat.total();
                     break;
                 
                 case 6:
                     menu.clear();
-                    out("\nLISTA DAS ATIVIDADES DA EMPRESA");
-                    
-                    
-                    
+                    out("\n\tLista das atividades da empresa:\n");
+                    dadosEmp.get(x).imprimeActivs();
+
+                        
                     out("\n\n\n\n\n\t\tPRIMA QUALQUER NUMERO PARA VOLTAR ATRAS");
                     in.nextInt();
+                    break;
                     
                 case 0:
                     return;
@@ -214,6 +240,7 @@ public class Gestao implements java.io.Serializable{
             }
         }
     }
+    
     public void ativP2(ArrayList ativs){
         menu.atividadesP2();
         while(true){
@@ -252,7 +279,7 @@ public class Gestao implements java.io.Serializable{
      * Login e Registo de Entidades
      */
     public Gestao(){
-            users.put(1234,"bolas");
+            users.put(1234,"admin");
             loadUsers();
             loadIndividual();
             loadEmpresa();
@@ -313,7 +340,7 @@ public class Gestao implements java.io.Serializable{
                                 if(tipoI){ // DEFINIDO COMO INDIVIDUAL
                                     out("\nIntroduza o seu nome");
                                     String nom = in.nextLine();
-                                    in.nextLine();
+                                    nom = in.nextLine();
                                     out("\nIntroduza o seu e-mail");
                                     String mail = in.nextLine();
                                     out("\nIntroduza a sua morada");
@@ -345,7 +372,7 @@ public class Gestao implements java.io.Serializable{
                                 else { // DEFINIDO COMO EMPRESA
                                     out("\nIntroduza o nome da empresa");
                                     String nome = in.nextLine();
-                                    in.nextLine();
+                                    nome = in.nextLine();
                                     out("\nIntroduza o seu e-mail");
                                     String mail = in.nextLine();
                                     out("\nIntroduza a sua morada");
@@ -523,9 +550,9 @@ public class Gestao implements java.io.Serializable{
         empList.delete();
     }
     
-    public void testPrint(HashMap<Integer,String> map){
+    public void mapPrint(HashMap<Integer,String> map){
         for(Map.Entry<Integer,String> u : map.entrySet()){
-                out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
+                out(" Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
             }
     }
 
