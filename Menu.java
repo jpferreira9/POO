@@ -1,6 +1,7 @@
 import java.util.*;
+import java.time.LocalDate;
 
-public class Menu{
+public class Menu implements java.io.Serializable{
     public static void clear() {  
         System.out.print("\u000C");  
         System.out.flush();  
@@ -17,6 +18,7 @@ public class Menu{
         //FEITO validar o acesso à aplicação utilizando as credenciais (nif e password)
         out("\n\t2) Registar um novo utilizador"); 
         //FEITO registar um contribuinte, quer seja individual ou empresa
+        out("\n\t3) Sair");
     }
     
     public void individual(int nif){
@@ -99,16 +101,39 @@ public class Menu{
     }
     
     public void pausar(){
-        /*
-        System.out.println("\tPressione qualquer tecla para continuar\n");
-        Scanner keyboard = new Scanner(System.in);
-        keyboard.nextLine();*/
         try {Thread.sleep(2000);} catch (Exception e){}
     }
     
+    public void fatHeader() {
+        out("--------------------------------------------------------------------------------------------------------");
+        out("      |            |           |             |             |            |            |");
+        out("  Nº  |  Vendedor  |    NIF    |    Data     | NIF Cliente | Descrição  | Actividade |    Valor  ");
+        out("      |            |           |             |             |            |            |");
+        out("--------------------------------------------------------------------------------------------------------");
+    }
+    
+    public void impFat(int numFat, int nifE, String nome, LocalDate dataF, int nifC, String desc, double v, String activ) {
+        String numFatF = String.format("%04d", numFat);
+        String nomeF = nome.substring(0, Math.min(nome.length(), 10));
+        String descF = desc.substring(0, Math.min(desc.length(), 10));
+        String activF = activ.substring(0, Math.min(activ.length(), 10));
+        while(nomeF.length()<10) {
+            nomeF += " ";
+        }
+        while(descF.length()<10) {
+            descF += " ";
+        }
+        while(activF.length()<10) {
+            activF += " ";
+        }
+        out(numFatF + "  | " +nomeF+ " | " +nifE+ " |  " +dataF+" | " +nifC+ "   | " +descF+ " | " +activF+ " | " +v+"€ ");
+        out("--------------------------------------------------------------------------------------------------------");
+    }
+    
+    
     public void sair(){
         clear();
-        out("\n\n\tObrigado pela sua visita, boas compras.");
+        out("\n\n\tObrigado pela oferta ao estado.");
     }
     
 }

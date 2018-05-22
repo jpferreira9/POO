@@ -1,12 +1,13 @@
 import java.util.*;
 import java.time.LocalDate;
 
-public class Fatura{
+public class Fatura implements java.io.Serializable{
     private int nifEmitente;
     private String desigEmitente;
     private LocalDate data;
     private int nifCliente;
-    private String descriçao;
+    private String descricao;
+    private String atividade;
     private double valor;
     
     public Fatura(){
@@ -14,16 +15,18 @@ public class Fatura{
         this.desigEmitente = "";
         this.data = LocalDate.of(2018,1,1);
         this.nifCliente = 0;
-        this.descriçao = "";
+        this.descricao = "";
+        this.atividade = "";
         this.valor = 0.0;
     }
     
-    public Fatura(int nif, String designaçao, LocalDate data, int nifCliente, String descriçao, double valor){
+    public Fatura(int nif, String designaçao, LocalDate data, int nifCliente, String descricao, String activ, double valor){
         this.nifEmitente = nif;
         this.desigEmitente = designaçao;
         this.data = data;
         this.nifCliente = nifCliente;
-        this.descriçao = descriçao;
+        this.descricao = descricao;
+        this.atividade = activ;
         this.valor = valor;
     }
     
@@ -32,7 +35,8 @@ public class Fatura{
         this.desigEmitente = f.getDEmitente();
         this.data = f.getData();
         this.nifCliente = f.getNIFCliente();
-        this.descriçao = f.getDescriçao();
+        this.descricao = f.getDescricao();
+        this.atividade = f.getAtividade();
         this.valor = f.getValor();
     }
     
@@ -44,7 +48,9 @@ public class Fatura{
     
     public int getNIFCliente(){ return this.nifCliente; }
     
-    public String getDescriçao(){ return this.descriçao; }
+    public String getDescricao(){ return this.descricao; }
+    
+    public String getAtividade(){ return this.atividade; }
     
     public double getValor(){ return this.valor; }
     
@@ -56,7 +62,11 @@ public class Fatura{
     
     public void setNIFCliente(int novoCliente){ this.nifCliente = novoCliente; }
     
-    public void setDescriçao(String descriçao){ this.descriçao = descriçao; }
+    public void setdescricao(String novaDesc){ this.descricao = novaDesc; }
+    
+    public void setAtividade(String novaAtiv){ this.atividade = novaAtiv;}
+    
+    public void setValor(Double novoValor){ this.valor = novoValor; }
     
     public boolean equals(Object o){
         if(this == o) 
@@ -68,7 +78,8 @@ public class Fatura{
                 this.desigEmitente.equals(f.getDEmitente()) &&
                 this.data.equals(f.getData()) &&
                 this.nifCliente == f.getNIFCliente() &&
-                this.descriçao.equals(f.getDescriçao()) &&
+                this.descricao.equals(f.getDescricao()) &&
+                this.atividade.equals(f.getAtividade()) &&
                 this.valor == f.getValor();
     }
     
@@ -78,7 +89,8 @@ public class Fatura{
         sb.append("Designacao do Emitente: " +this.desigEmitente+ "\n");
         sb.append("Data: " +this.data+ "\n");
         sb.append("NIF do Cliente: " +this.nifCliente+ "\n");
-        sb.append("Descriçao: " +this.descriçao+ "\n");
+        sb.append("Descricao: " +this.descricao+ "\n");
+        sb.append("Atividade: " +this.atividade+ "\n");
         sb.append("Valor: " +this.valor+ "\n");
         
         return sb.toString();
@@ -87,21 +99,4 @@ public class Fatura{
     public Fatura clone(){
         return new Fatura(this);
     }
-    
-    public void imprime(){ //criar fatura de venda
-    }
-    
-    public void editar(){ //associar/editar classificação de actividade
-    }
-    
-    public void lista(){//obter a listagem das faturas da empresa, ordenada por data ou valor
-    }
-    
-    public void cliente(){//obter a listagem das faturas de um cliente, ordenada por data ou valor
-    }
-    
-    public void total(){//total facturado por uma empresa num determinado período
-    }
-    
-    
 }

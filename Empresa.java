@@ -11,6 +11,11 @@ public class Empresa implements java.io.Serializable{
     private ArrayList<String> activ;
     private int ffiscal;
     
+    Menu menu = new Menu();
+    public void out(Object o){
+        System.out.println(o);
+    }
+    
     public Empresa(){
         this.nif = 0;
         this.password = "";
@@ -112,23 +117,85 @@ public class Empresa implements java.io.Serializable{
         return new Empresa(this);
     }
     
-    public void criarFatura(ArrayList<Fatura> listaFaturas){
-        
+    //ver se funciona
+    public Fatura criarFatura(){
         LocalDate now = LocalDate.now();
         Scanner input = new Scanner(System.in);
-        
-        System.out.println("NIF do cliente");
+                
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: ");
         int nifCliente = input.nextInt();
-        System.out.println("Descricao da fatura");
-        String descricao = input.nextLine();
-        descricao = input.nextLine();
-        System.out.println("Valor da fatura");
-        double valor = input.nextDouble();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: ");
+        String descricao = input.next();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: "+descricao);
+        out("\n\t5 Natureza da despesa: ");
+        String act = input.nextLine();
+        act = input.nextLine();
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: "+descricao);
+        out("\n\t5 Natureza da despesa: " + act);
+        out("\n\t6 Valor da despesa: ");
+        double valor = input.nextDouble(); 
+        menu.clear();
+        out("\n\t NIF da empresa:" +this.getNif());
+        out("\n\t1 Nome da empresa: " +this.getNome());
+        out("\n\t2 Data da despesa: " +now);
+        out("\n\t3 Nif do Cliente: " +nifCliente);
+        out("\n\t4 Breve descriçao da despesa: "+descricao);
+        out("\n\t5 Natureza da despesa: " + act);
+        out("\n\t6 Valor da despesa: " + valor);
         
-        Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, valor);
+        Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, act, valor);        
+        
         System.out.println(fat.toString());
-        listaFaturas.add(fat);
+        return fat;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public void imprimeFaturas(int x, ArrayList<Fatura> z) {
+        Fatura f = new Fatura();
+        menu.fatHeader();
+        for(int i=0;i<z.size();i++) {
+            f = z.get(i);
+            if(f.getNIFEmitente()==x);{
+                String n = f.getDEmitente();
+                int nC = f.getNIFCliente();
+                String desc = f.getDescricao(); 
+                LocalDate dT = f.getData();
+                double v = f.getValor();
+                String act = f.getAtividade();
+                menu.impFat(i+1,x,n,dT,nC,desc,v,act);
+            }
+        }
+    }
+    
     
     /**
      * Imprime atividades da Empresa
@@ -137,7 +204,6 @@ public class Empresa implements java.io.Serializable{
         for(String s: this.activ)
             System.out.println(" * "+s);
     }
-    
     
 }
         

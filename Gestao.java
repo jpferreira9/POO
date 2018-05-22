@@ -13,6 +13,7 @@ public class Gestao implements java.io.Serializable{
     HashMap<Integer,String> users =  new HashMap<Integer,String>();
     HashMap<Integer,Empresa> dadosEmp = new HashMap<Integer,Empresa>();
     HashMap<Integer,Individual> dadosInd = new HashMap<Integer, Individual>();
+    HashMap<Integer,ArrayList<Fatura>> dadosFat = new HashMap<Integer,ArrayList<Fatura>>();
     ArrayList<Fatura> listaFaturas = new ArrayList<Fatura>();
 
     
@@ -36,6 +37,7 @@ public class Gestao implements java.io.Serializable{
                         resetUsers();
                         resetEmp();
                         resetIndiv();
+                        resetFaturas();
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
@@ -153,38 +155,51 @@ public class Gestao implements java.io.Serializable{
     public void empresa(int x){
         while(true){         
             menu.empresa(x);
-                System.out.println(x);
-                System.out.println(dadosEmp.toString());
+                //System.out.println(x);
+                System.out.println(dadosEmp.get(x).toString());
             switch(in.nextInt()){
 
                 case 1:
                     out("Fatura de venda");
-                    dadosEmp.get(x).criarFatura(listaFaturas);
+                    fat = dadosEmp.get(x).criarFatura();
+                    System.out.println(fat.toString());
+                    if(dadosFat.containsKey(x))
+                        listaFaturas = dadosFat.get(x);
+                    
+                    listaFaturas.add(fat);
+                    dadosFat.put(x,listaFaturas);
+                    saveFaturas(dadosFat);
                     in.nextInt();
                     break;
                 
                 case 2:
                     out("\nASSOCIAR/EDITAR ATIVIDADE NA FATURA");
-                    fat.editar();
+                   
                     break;
                     
                 case 3:
+                    menu.clear();
                     out("\nLista de faturas:");
-                    fat.lista();
+                    if(dadosFat.get(x) == null)
+                        out("Nao existem faturas registadas nesta Empresa");
+                    else{
+                        dadosEmp.get(x).imprimeFaturas(x,dadosFat.get(x));
+                    }
+                    in.nextInt();
                     break;
                     
                 case 4:
                     out("\nINTRODUZIR NUMERO CONTRIBUINTE");
                     
                     out("\nIntroduzir data:");
-                    fat.cliente();
+                    
                     break;
                     
                 case 5:
                     out("\nINTRODUZIR DATA:");
                     
                     out("\nTotal faturado:");
-                    fat.total();
+                    
                     break;
                 
                 case 6:
@@ -278,11 +293,12 @@ public class Gestao implements java.io.Serializable{
     /**
      * Login e Registo de Entidades
      */
-    public Gestao(){
+    public Gestao() throws LoginException{
             users.put(1234,"admin");
             loadUsers();
             loadIndividual();
             loadEmpresa();
+            loadFaturas();
             while(true){    
                 menu.login();                     
                 switch(in.nextInt()){
@@ -391,20 +407,26 @@ public class Gestao implements java.io.Serializable{
                                 break;
                                 }
                             else{
-                                out("\nNIF já existe!");
-                                break;
+
                             }
                         }
                         else {
-                            out("\nNIF inválido!");
+                            out("NIF inválido!");
                             break;
-                        }                       
+                        }
+                    case 3:
+                        menu.sair();
+                        return;
+                    
                     default:
                         out("\nOpção inválida!");
                         break;
                 }
                 out("\nPrima qualquer nº para continuar, 0 para sair:");
-                if(in.nextInt() == 0) return;
+                if(in.nextInt() == 0){
+                    menu.sair();
+                    return;
+                }
             }
             
         }
@@ -424,9 +446,9 @@ public class Gestao implements java.io.Serializable{
             oos.flush();
             oos.close();
             fos.close();
-            out("Ficheiro guardado com sucesso");
+            out("Ficheiro Users guardado com sucesso");
         }
-        catch(Exception e){out("Erro ao guardar ficheiro");}
+        catch(Exception e){out("Erro ao guardar ficheiro Users");}
     }
     
     /**
@@ -444,7 +466,7 @@ public class Gestao implements java.io.Serializable{
             ois.close();
             fis.close();
         }
-        catch(Exception e){out("Erro ao abrir ficheiro");}
+        catch(Exception e){out("Erro ao abrir ficheiro Users");}
     }
     
     /**
@@ -471,9 +493,9 @@ public class Gestao implements java.io.Serializable{
             oos.flush();
             oos.close();
             fos.close();
-            out("Ficheiro guardado com sucesso");
+            out("Ficheiro Individual guardado com sucesso");
         }
-        catch(Exception e){out("Erro ao guardar ficheiro");}
+        catch(Exception e){out("Erro ao guardar ficheiro Individual");}
     }
     
     /**
@@ -491,11 +513,11 @@ public class Gestao implements java.io.Serializable{
             ois.close();
             fis.close();
         }
-        catch(Exception e){out("Erro ao abrir ficheiro");}
+        catch(Exception e){out("Erro ao abrir ficheiro Individual");}
     }
     
     /**
-     * Apagar dados dos Individuais
+     * Apagar dados do ficheiro dos Individuais
      */
     
     public void resetIndiv(){
@@ -504,9 +526,9 @@ public class Gestao implements java.io.Serializable{
     }
     
      /**
-     * Gravar os dados dos NIF's de Empresas criadas em ficheiro,
-     * para que seja possível retomar mais tarde a execução
-     */
+      * Gravar em ficheiro binario os dados dos NIF's de Empresas criadas em ficheiro,
+      * para que seja possível retomar mais tarde a execução
+      */
         
     public void saveEmpresa(HashMap<Integer,Empresa> empresa){   
         try{
@@ -518,9 +540,12 @@ public class Gestao implements java.io.Serializable{
             oos.flush();
             oos.close();
             fos.close();
-            out("Ficheiro guardado com sucesso");
+            out("Empresa guardada com sucesso");
         }
-        catch(Exception e){out("Erro ao guardar ficheiro");}
+        catch(Exception e){
+            //out("Erro ao guardar Empresa");
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -538,17 +563,66 @@ public class Gestao implements java.io.Serializable{
             ois.close();
             fis.close();
         }
-        catch(Exception e){out("Erro ao abrir ficheiro");}
+        catch(Exception e){out("Erro ao abrir ficheiro Empresa");}
     }
     
     /**
-     * Apagar dados das Empresas
+     * Apagar dados do ficheiro das Empresas
      */
     
     public void resetEmp(){
         File empList = new File("empList");
         empList.delete();
     }
+    
+     /**
+     * Grava ficheiro binario com todas as faturas criadas
+     * A cada NIF da empresa grava uma lista com as faturas criadas pela empresa
+     */
+        
+    public void saveFaturas(HashMap<Integer,ArrayList<Fatura>> faturas){   
+        try{
+            File fatsList = new File("fatsList");
+            FileOutputStream fos = new FileOutputStream(fatsList);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            
+            oos.writeObject(faturas);
+            oos.flush();
+            oos.close();
+            fos.close();
+            out("Ficheiro Faturas guardado com sucesso");
+        }
+        catch(Exception e){out("Erro ao guardar ficheiro Faturas");}
+    }
+    
+    /**
+     * Ler os dados do ficheiro das Fatura
+     */
+    
+    public void loadFaturas(){        
+        try{
+            File toRead = new File("fatsList");
+            FileInputStream fis=new FileInputStream(toRead);
+            ObjectInputStream ois=new ObjectInputStream(fis);
+            
+            dadosFat = (HashMap<Integer,ArrayList<Fatura>>)ois.readObject();
+            
+            ois.close();
+            fis.close();
+        }
+        catch(Exception e){out("Erro ao abrir ficheiro Faturas");}
+    }
+    
+    /**
+     * Apagar dados do ficheiro das Faturas
+     */
+    
+    public void resetFaturas(){
+        File fatsList = new File("fatsList");
+        fatsList.delete();
+    }
+    
+    
     
     public void mapPrint(HashMap<Integer,String> map){
         for(Map.Entry<Integer,String> u : map.entrySet()){
@@ -557,7 +631,7 @@ public class Gestao implements java.io.Serializable{
     }
 
     
-    public static void main(String[] args){        
+    public static void main(String[] args) throws IOException, LoginException{        
         new Gestao();
     }
 }
