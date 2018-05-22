@@ -635,6 +635,17 @@ public class Gestao implements java.io.Serializable{
         	}
     	System.out.println("Total faturado pela empresa no intervalo: "+ total + "€");
     }
+    public void listagemDespesas(int x) {
+    	double total = 0;
+    	for(Map.Entry<Integer,ArrayList<Fatura>> u : dadosFat.entrySet()){
+    		listaFaturas = u.getValue();
+    		for(int i=0; i<listaFaturas.size();i++) {
+    			if(listaFaturas.get(i).getNIFCliente()==x) {
+    				total += listaFaturas.get(i).getValor();
+    			}
+    		}
+    	}
+    }
     
     
     public static void main(String[] args){        
