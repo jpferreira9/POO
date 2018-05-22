@@ -121,7 +121,6 @@ public class Empresa implements java.io.Serializable{
     public Fatura criarFatura(ArrayList<Fatura> f){
         LocalDate now = LocalDate.now();
         Scanner input = new Scanner(System.in);
-                
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
         out("\n\t1 Nome da empresa: " +this.getNome());
@@ -142,8 +141,8 @@ public class Empresa implements java.io.Serializable{
         out("\n\t3 Nif do Cliente: " +nifCliente);
         out("\n\t4 Breve descriçao da despesa: "+descricao);
         out("\n\t5 Natureza da despesa: ");
-        String act = input.nextLine();
-        act = input.nextLine();
+        String act = "";
+        act = select_activ(act);
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
         out("\n\t1 Nome da empresa: " +this.getNome());
@@ -191,20 +190,59 @@ public class Empresa implements java.io.Serializable{
     	}
     }
     
-    public void totalFaturado(int x, ArrayList<Fatura> z) {
-    	Fatura f = new Fatura();
-    	double total = 0;
-    	for(int i=0;i<z.size();i++) {
-    		f = z.get(i);
-    		if(f.getNIFEmitente()==x) {
-    			total += f.getValor();
-    		}
-    	}
-    	System.out.println("Total faturado pela empresa: "+ total + "€");
-    }
+    public String select_activ(String activ){
+        menu.menu_ativs();
+        Scanner in = new Scanner(System.in);
+        while(true){
+            switch(in.nextInt()){
+                case 1:
+                    activ = "Cabeleireiros";                
+                    return activ;
+                case 2:
+                    activ = "Despesas Familiares";
+                    return activ;
+                case 3:
+                    activ = "Educação";
+                    return activ;
+                case 4:
+                    activ = "Habitação";
+                    return activ;
+                case 5:
+                    activ = "Lares";
+                    return activ;
+                case 6:
+                    activ = "Passes Mensais";
+                    return activ;
+                case 7:
+                    activ = "Reparações Automóvel";
+                    return activ;
+                case 8:
+                    activ = "Reparações Motorizadas";
+                    return activ;
+                case 9:
+                    activ = "Restauração e Alojamento";
+                    return activ;
+                case 10:
+                    activ = "Saúde";
+                    return activ;
+                case 11:
+                    activ = "Veterinários";
+                    return activ;
+                case 12:
+                    activ = "Outros";
+                    return activ;
+                case 0:
+                    return activ;
+                default:
+                    out("Opção inválida");
+                    break;
+            }
+        }
+}
     
     public void numFaturas(int x) {
     	
     }
 }
+        
         
