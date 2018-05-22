@@ -69,10 +69,10 @@ public class Entidade{
         StringBuilder sb = new StringBuilder();
         
         sb.append("NIF: " +this.nif+ "\n");
+        sb.append("Password: "+this.password+ "\n");
         sb.append("Nome: "+this.nome+ "\n");
         sb.append("Morada: " +this.morada+ "\n");
         sb.append("Email: " +this.email+ "\n");
-        sb.append("Password: "+this.password+ "\n");
         
         return sb.toString();
     }
