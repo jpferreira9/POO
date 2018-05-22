@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Individual{
+public class Individual implements java.io.Serializable{
     public int nif;
     public String email;
     public String nome;
@@ -33,7 +33,6 @@ public class Individual{
         this.agregado = agreg;
         this.coef = coef;
         this.cod = cod;
-        this.nifAgregado.clear();
         this.nifAgregado = new ArrayList<Integer>(na.size());
         for(Integer i: na)
             this.nifAgregado.add(i);
