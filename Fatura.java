@@ -101,12 +101,6 @@ public class Fatura implements java.io.Serializable{
         return new Fatura(this);
     }
     
-    public void editar(){ //associar/editar classificação de actividade
-    }
-        
-    public void cliente(){//obter a listagem das faturas de um cliente, ordenada por data ou valor
-    }
-    
     public void total(){//total facturado por uma empresa num determinado período
     }
     
