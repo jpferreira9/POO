@@ -17,9 +17,7 @@ public class Menu implements java.io.Serializable{
         clear();
         out("\n\t\t####### Bem vindo ao JavaFactura #######\n\n\n\nEscolha a sua opção:");
         out("\n\t1) Fazer login"); 
-        //FEITO validar o acesso à aplicação utilizando as credenciais (nif e password)
         out("\n\t2) Registar um novo utilizador"); 
-        //FEITO registar um contribuinte, quer seja individual ou empresa
     }
     
     public void individual(int nif){	
@@ -32,31 +30,24 @@ public class Menu implements java.io.Serializable{
         out("\n\n\t0) Sair");
     }
     
-    public void atividadesP1(){
+    public void menu_ativs(){
         clear();
         out("####### Selecione a(s) atividade(s): #######");
         out("\n\t1) Cabeleireiros");
-        out("\n\t2) Despesas Familiares");
-        out("\n\t3) Educação");
-        out("\n\t4) Habitação");
-        out("\n\t5) Lares");
-        out("\n\t6) Passes Mensais");
-        out("\n\t9) Página Seguinte ----->");
+        out("\t2) Despesas Familiares");
+        out("\t3) Educação");
+        out("\t4) Habitação");
+        out("\t5) Lares");
+        out("\t6) Passes Mensais");
+        out("\t7) Reparação Automóvel");
+        out("\t8) Reparação Motorizadas");
+        out("\t9) Restauração & Alojamento");
+        out("\t10) Saúde");
+        out("\t11) Veterinários");
+        out("\t12) Outros");
         out("\n\t0) Sair");
-    }
-    
-    public void atividadesP2(){
-        clear();
-        out("####### Selecione a(s) atividade(s): #######");
-        out("\n\t1) Reparação Automóvel");
-        out("\n\t2) Reparação Motorizadas");
-        out("\n\t3) Restauração & Alojamento");
-        out("\n\t4) Saúde");
-        out("\n\t5) Veterinários");
-        out("\n\t6) Outros");
-        out("\n\t9) <----- Página Anterior");
-    }
-    
+}
+     
     public void empresa(int nif){
         clear();
         out("\n\t ####### Bem vindo #######\n\n\n\nEscolha a sua opção: ");
@@ -126,9 +117,34 @@ public class Menu implements java.io.Serializable{
     	out("--------------------------------------------------------------------------------------------------------");
     }
     
+    public void fatHeader2() {
+    	out("--------------------------------------------------------------------------------------------------------");
+    	out("            |           |             |            |            |");
+    	out("  Vendedor  |    NIF    |    Data     | Descrição  | Actividade |    Valor  ");
+    	out("            |           |             |            |            |");
+    	out("--------------------------------------------------------------------------------------------------------");
+    }
+    public void impFat2(String nomeVendedor, int nifVendedor, LocalDate dataF, String desc, double v, String activ) {
+    	String nomeF = nomeVendedor.substring(0, Math.min(nomeVendedor.length(), 10));
+    	String descF = desc.substring(0, Math.min(desc.length(), 10));
+    	String activF = activ.substring(0, Math.min(activ.length(), 10));
+    	while(nomeF.length()<10) {
+    		nomeF += " ";
+    	}
+    	while(descF.length()<10) {
+    		descF += " ";
+    	}
+    	while(activF.length()<10) {
+    		activF += " ";
+    	}
+    	out(nomeF+ " | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " | " +v+"€ ");
+    	out("--------------------------------------------------------------------------------------------------------");
+    }
+    
     public void sair(){
         clear();
         out("\n\n\tObrigado pela visita");
     }
     
 }
+
