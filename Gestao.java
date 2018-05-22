@@ -1,5 +1,8 @@
 import java.util.*;
+import java.util.Map.Entry;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Gestao implements java.io.Serializable{	
 	
@@ -84,7 +87,7 @@ public class Gestao implements java.io.Serializable{
                     return;
                     
                 default:
-                    out("\nOPCAO INVALIDA!");
+                    out("\nOpção inválida!");
                     break;    
             }
         }
@@ -95,11 +98,25 @@ public class Gestao implements java.io.Serializable{
             menu.admin();
             switch(in.nextInt()){
                case 1:
-                    out("\nOS 10 CONTRIBUINTES COM MAIS DESPESAS:");
+			    // EM PROGRESSO
+                    out("\n10 contribuintes com mais despesas:");
+                    ArrayList<Integer> listaInd = new ArrayList<Integer>();
+                    for(Map.Entry<Integer,Individual> u : dadosInd.entrySet()){
+                		listaInd.add(u.getKey());
+                    }
+                    for(int x=0; x < listaInd.size() ;x++) {
+                    	double total = 0;	
+                    	for(int i=0;i<listaFaturas.size();i++) {
+                    		fat = listaFaturas.get(i);
+                    		if(fat.getNIFCliente()==x) {
+                    			total += fat.getValor();
+                    		}
+                    	}
+                    }
                     break;
                
                case 2:
-                    out("\nQuantas empresas deseja verificar?");
+                    out("\n 	!!!!!!	Quantas empresas deseja verificar?");
                     int num = in.nextInt();
                     emp.numFaturas(num);
                     break;
@@ -128,7 +145,14 @@ public class Gestao implements java.io.Serializable{
             menu.individual(x);
             switch(in.nextInt()){
                 case 1:
+                	//verificar, por parte do contribuinte individual, as despesas que foram emitidas em seu nome 
                     out("\nLista de despesas:");
+                    ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
+                    fatCliente = listagemDespesas(x);
+                    menu.fatHeader2();
+                    for(Fatura f : fatCliente)
+                    	menu.impFat2(f.getDEmitente(),f.getNIFEmitente(),f.getData(), f.getDescricao(), f.getValor(), f.getActiv());	
+                    
                     break;
                 /* INCOMPLETO
                 case 2: 
@@ -161,28 +185,53 @@ public class Gestao implements java.io.Serializable{
                     break;
                 
                 case 2:
-                    out("\nASSOCIAR/EDITAR ATIVIDADE NA FATURA");
-                    fat.editar();
+                    out("\nEditar atividade de uma fatura emitida");
                     break;
                     
                 case 3:
                     out("\nLista de Faturas:");
                     listaFaturas = dadosFat.get(x);
-                    emp.imprimeFaturas(x,listaFaturas);
-                    break;
+                    if(listaFaturas != null) {
+                    	emp.imprimeFaturas(x,listaFaturas);
+                    	break;
+                    }
+                    else {
+                    	out("Não existem faturas");
+                    	break;
+                    }
                     
                 case 4:
-                    out("\nINTRODUZIR NUMERO CONTRIBUINTE");
-                    
-                    out("\nINTRODUZIR DATA:");
-                    fat.cliente();
+                    out("\nIntroduzir número de contribuinte:");
+                    int y = in.nextInt();
+                    while(nifValido(y)==false) {
+                    	out("NIF inválido, tente novamente");
+                    	y = in.nextInt();
+                    }
+                    DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                	out("\nIntroduzir data inicial (dd/MM/yyyy):");
+                    String inicio = in.nextLine();
+                    inicio = in.nextLine();
+                    LocalDate date1 = null;
+                	date1 = LocalDate.parse(inicio, sdf);
+                	out("\nIntroduzir data final (dd/MM/yyyy):");
+                    String fim= in.nextLine();
+                	LocalDate date2 = null;
+                	date2 = LocalDate.parse(fim, sdf);
+                	double tot = 0;
+                    	for(int i=0;i<listaFaturas.size();i++) {
+                    		fat = listaFaturas.get(i);
+                    		if(fat.getNIFEmitente()==x && fat.getNIFCliente()==y && fat.getData().isBefore(date2) && fat.getData().isAfter(date1)) {
+                    			tot += fat.getValor();
+                    		}
+                    	}
+                    	out("O NIF "+y+ " gastou "+tot+"€ entre "+inicio+ " e " + fim);
                     break;
                     
                 case 5:
                     out("\nINTRODUZIR DATA:");
                     
                     out("\nTOTAL FATURADO:");
-                    emp.totalFaturado();
+                    totalFaturado(x,listaFaturas);
                     break;
                 
                 case 6:
@@ -203,8 +252,8 @@ public class Gestao implements java.io.Serializable{
     }
     
     
-    public void ativP1(ArrayList<String> ativs){
-        menu.atividadesP1();
+    public void atividades(ArrayList<String> ativs){
+        menu.menu_ativs();
         while(true){
             switch(in.nextInt()){
                 case 1:
@@ -225,8 +274,23 @@ public class Gestao implements java.io.Serializable{
                 case 6:
                     ativs.add("Passes Mensais");
                     break;
+                case 7:
+                    ativs.add("Reparações Automóvel");
+                    break;
+                case 8:
+                    ativs.add("Reparações Motorizadas");
+                    break;
                 case 9:
-                    ativP2(ativs);
+                    ativs.add("Restauração e Alojamento");
+                    break;
+                case 10:
+                    ativs.add("Saúde");
+                    break;
+                case 11:
+                    ativs.add("Veterinários");
+                    break;
+                case 12:
+                    ativs.add("Outros");
                     break;
                 case 0:
                     return;
@@ -235,38 +299,7 @@ public class Gestao implements java.io.Serializable{
                     break;
             }
         }
-    }
-    public void ativP2(ArrayList<String> ativs){
-        menu.atividadesP2();
-        while(true){
-            switch(in.nextInt()){
-                case 1:
-                    ativs.add("Reparações Automóvel");
-                    break;
-                case 2:
-                    ativs.add("Reparações Motorizadas");
-                    break;
-                case 3:
-                    ativs.add("Restauração e Alojamento");
-                    break;
-                case 4:
-                    ativs.add("Saúde");
-                    break;
-                case 5:
-                    ativs.add("Veterinários");
-                    break;
-                case 6:
-                    ativs.add("Outros");
-                    break;
-                case 9:
-                    ativP1(ativs);
-                    break;
-                default:
-                    out("Opção inválida");
-                    break;
-            }
-        }
-    }
+}
     
     /**
      * Login e Registo de Entidades
@@ -375,7 +408,7 @@ public class Gestao implements java.io.Serializable{
                                     String morada = in.nextLine();
                                     
                                     ArrayList<String> ativs = new ArrayList<String>();
-                                    ativP1(ativs);
+                                    atividades(ativs);
                                     
                                     emp = new Empresa(a,pw, nome, mail, morada, ativs,1);
                                     
@@ -614,7 +647,7 @@ public class Gestao implements java.io.Serializable{
                 out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
             }
     }
-	
+
     public void totalFaturado(int x, ArrayList<Fatura> z) {
     	DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     	out("\nIntroduzir data inicial (dd/MM/yyyy):");
@@ -635,18 +668,19 @@ public class Gestao implements java.io.Serializable{
         	}
     	System.out.println("Total faturado pela empresa no intervalo: "+ total + "€");
     }
-    public void listagemDespesas(int x) {
-    	double total = 0;
+    
+    public ArrayList<Fatura> listagemDespesas(int x) {
+    	ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
     	for(Map.Entry<Integer,ArrayList<Fatura>> u : dadosFat.entrySet()){
     		listaFaturas = u.getValue();
     		for(int i=0; i<listaFaturas.size();i++) {
     			if(listaFaturas.get(i).getNIFCliente()==x) {
-    				total += listaFaturas.get(i).getValor();
+    				fatCliente.add(listaFaturas.get(i));
     			}
     		}
     	}
+    	return fatCliente;
     }
-    
     
     public static void main(String[] args){        
         new Gestao();
