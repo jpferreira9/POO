@@ -614,7 +614,28 @@ public class Gestao implements java.io.Serializable{
                 out("Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
             }
     }
-
+	
+    public void totalFaturado(int x, ArrayList<Fatura> z) {
+    	DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    	out("\nIntroduzir data inicial (dd/MM/yyyy):");
+        String inicio = in.nextLine();
+        inicio = in.nextLine();
+        LocalDate date1 = null;
+    	date1 = LocalDate.parse(inicio, sdf);
+    	out("\nIntroduzir data final (dd/MM/yyyy):");
+        String fim= in.nextLine();
+    	LocalDate date2 = null;
+    	date2 = LocalDate.parse(fim, sdf);
+    	double total = 0;	
+        	for(int i=0;i<z.size();i++) {
+        		fat = z.get(i);
+        		if(fat.getNIFEmitente()==x && fat.getData().isBefore(date2) && fat.getData().isAfter(date1)) {
+        			total += fat.getValor();
+        		}
+        	}
+    	System.out.println("Total faturado pela empresa no intervalo: "+ total + "€");
+    }
+    
     
     public static void main(String[] args){        
         new Gestao();
