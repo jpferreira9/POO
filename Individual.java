@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Individual implements java.io.Serializable{
+public class Individual{
     public int nif;
     public String email;
     public String nome;
@@ -9,7 +9,6 @@ public class Individual implements java.io.Serializable{
     public int agregado;
     public ArrayList<Integer> nifAgregado;
     public float coef;
-    public int cod;
     
     public Individual(){
         this.nif=0;
@@ -20,11 +19,10 @@ public class Individual implements java.io.Serializable{
         this.agregado = 0;
         this.nifAgregado = new ArrayList<Integer>(0);
         this.coef = 0;
-        this.cod = 0;
     }
     
     
-    public Individual (int nif, String email, String nome, String morada, String password ,int agreg , ArrayList<Integer> na, float coef, int cod){
+    public Individual (int nif, String email, String nome, String morada, String password ,int agreg , ArrayList<Integer> na, float coef){
         this.nif = nif;
         this.email=email;
         this.nome=nome;
@@ -32,7 +30,7 @@ public class Individual implements java.io.Serializable{
         this.password=password;
         this.agregado = agreg;
         this.coef = coef;
-        this.cod = cod;
+        this.nifAgregado.clear();
         this.nifAgregado = new ArrayList<Integer>(na.size());
         for(Integer i: na)
             this.nifAgregado.add(i);
@@ -47,7 +45,6 @@ public class Individual implements java.io.Serializable{
         this.agregado = i.getAgreg();
         this.nifAgregado = i.getNifAgreg();
         this.coef = i.getCoef();
-        this.cod = i.getCod();
     }
     
     public int getNif(){
@@ -85,10 +82,6 @@ public class Individual implements java.io.Serializable{
         return this.coef;
     }
     
-    public int getCod(){
-        return this.cod;
-    }
-    
     public void setNif(int nif){
         this.nif = nif;
     }
@@ -124,10 +117,6 @@ public class Individual implements java.io.Serializable{
         this.coef = novoCoef;
     }
     
-    public void setCod(int novoCod){
-        this.cod = novoCod;
-    }
-    
     public boolean equals (Object o ){
         if (this == o) return true;
         if ((o == null) || this.getClass() != o.getClass()) return false;
@@ -139,8 +128,7 @@ public class Individual implements java.io.Serializable{
                 this.password.equals(i.getPassword()) &&
                this.agregado == i.getAgreg() && 
                this.nifAgregado.equals(i.getNifAgreg()) &&
-               this.coef == i.getCoef() &&
-               this.cod == i.getCod();
+               this.coef == i.getCoef();
     }
     
     public Individual clone(){
