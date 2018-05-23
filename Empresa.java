@@ -15,8 +15,8 @@ public class Empresa implements java.io.Serializable{
     public void out(Object o){
         System.out.println(o);
     }
-    
-    
+
+
     public Empresa(){
         this.nif = 0;
         this.password = "";
@@ -144,7 +144,8 @@ public class Empresa implements java.io.Serializable{
         out("\n\t Data da despesa: " +now);
         out("\n\t Nif do Cliente: " +nifCliente);
         out("\n\t Breve descriçao da despesa: ");
-        String descricao = input.next();
+        String descricao = input.nextLine();
+        descricao = input.nextLine();
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
         out("\n\t Nome da empresa: " +this.getNome());
@@ -163,7 +164,6 @@ public class Empresa implements java.io.Serializable{
         out("\n\t Natureza da despesa: " + act);
         out("\n\t Valor da despesa: ");
         double valor = input.nextDouble();
-        valor = input.nextDouble();
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
         out("\n\t Nome da empresa: " +this.getNome());
@@ -263,8 +263,7 @@ public class Empresa implements java.io.Serializable{
         for(String s: this.activ)
             System.out.println(" * "+s);
     }
-    
-    
+
     
     public void imprimeTotal(int nr ,double total){
         String num = String.format("%04d", nr);
@@ -280,6 +279,5 @@ public class Empresa implements java.io.Serializable{
         
     
     }
-
 }
         

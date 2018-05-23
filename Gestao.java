@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map.Entry;
 
 /** JavaFatura
  * @author Francisco Correia
@@ -136,6 +137,7 @@ public class Gestao implements java.io.Serializable{
             switch(in.nextInt()){
                case 1:
                     out("\n\tOs 10 Contribuintes com mais despesas:");
+                    maisDespesas();
                     break;
                
                case 2:
@@ -153,18 +155,21 @@ public class Gestao implements java.io.Serializable{
                         c++;
                     }
                     ArrayList<Fatura> receipt = new ArrayList<Fatura>();
-                    int i=0;
+                    int i=1;
                     double total = 0;
                     menu.clear();
                     menu.fatHeader3();
                     for(Integer n: nifMaisFats){
-                        receipt = dadosFat.get(n);
-                        total = valorTotalNif(receipt);
-                        dadosEmp.get(n).imprimeTotal(i,total);
-                        i++;
+                        if(dadosFat.containsKey(n)){
+                            receipt = dadosFat.get(n);
+                            total = valorTotalNif(receipt);
+                            dadosEmp.get(n).imprimeTotal(i,total);
+                            i++;
+                        }
+                        else break;
                     }
                     
-                    out("Prima qualquer nr para continuar");
+                    out("\n\t\tPrima qualquer nr para continuar");
                     in.nextInt();
                     
                     break;
@@ -218,13 +223,22 @@ public class Gestao implements java.io.Serializable{
                     fatCliente = listagemDespesas(x);
                     menu.fatHeader2();
                     for(Fatura f : fatCliente)
-                    	menu.impFat2(f.getDEmitente(),f.getNIFEmitente(),f.getData(), f.getDescricao(), f.getValor(), f.getAtividade());	
+                        menu.impFat2(f.getDEmitente(),f.getNIFEmitente(),f.getData(), f.getDescricao(), f.getValor(), f.getAtividade());    
                 break;
                 
                 case 2:
-                    out("\nDEDUCAO FISCAL ACUMULADA:");
+                    menu.clear();
+                    out("\n\t\tDeducao fiscal acumulada:");
                     //ver se realmente e isto
-                    out("\n\t"+dadosInd.get(x).getCoef());
+                    fatCliente = listagemDespesas(x);
+                    double total = 0;
+                    for(Fatura f: fatCliente)
+                        total += f.getValor();
+                    double coeficiente = dadosInd.get(x).getCoef();
+                    out("\n\t O seu coeficiente fiscal: "+coeficiente);
+                    out("Valor total faturado: " +total);
+                    out("Valor total deduzido: " +(total*coeficiente));
+                    out("\n\n\t\t prima qualquer nr para continuar");
                     in.nextInt();
                     break;
                 
@@ -285,8 +299,8 @@ public class Gestao implements java.io.Serializable{
                     out("\nIntroduzir número de contribuinte:");
                     int y = in.nextInt();
                     while(nifValido(y)==false) {
-                    	out("NIF inválido, tente novamente");
-                    	y = in.nextInt();
+                        out("NIF inválido, tente novamente");
+                        y = in.nextInt();
                     }
                     DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                     out("\nIntroduzir data inicial (dd/MM/yyyy):");
@@ -300,19 +314,18 @@ public class Gestao implements java.io.Serializable{
                     date2 = LocalDate.parse(fim, sdf);
                     double tot = 0;
                     for(int i=0;i<listaFaturas.size();i++) {
-                    	fat = listaFaturas.get(i);
-                    	if(fat.getNIFEmitente()==x && fat.getNIFCliente()==y && fat.getData().isBefore(date2) && fat.getData().isAfter(date1)) {
-                    	    tot += fat.getValor();
-                    	}
+                        fat = listaFaturas.get(i);
+                        if(fat.getNIFEmitente()==x && fat.getNIFCliente()==y && fat.getData().isBefore(date2) && fat.getData().isAfter(date1)) {
+                            tot += fat.getValor();
+                        }
                     }
                     out("O NIF "+y+ " gastou "+tot+"€ entre "+inicio+ " e " + fim);
                     break;
                     
                 case 5:
-                    out("\nINTRODUZIR DATA:");
-                    
-                    out("\nTotal faturado:");
-                    
+                    listaFaturas = dadosFat.get(x);
+                    totalFaturado(x,listaFaturas);
+                    in.nextInt();
                     break;
                 
                 case 6:
@@ -334,6 +347,50 @@ public class Gestao implements java.io.Serializable{
             }
         }
     }
+    
+    public void maisDespesas() {
+        out("\n10 contribuintes com mais despesas:");
+        ArrayList<Fatura> allR = new ArrayList<Fatura>();
+        ArrayList<Integer> listaNIFS = new ArrayList<Integer>();
+        ArrayList<Double> listaGASTO = new ArrayList<Double>();
+        HashMap<Integer,Double> userGasto = new HashMap<Integer,Double>();
+        // pega no mapa das faturas todas e adiciona no arraylist
+        for(Entry<Integer, ArrayList<Fatura>> u : dadosFat.entrySet()){
+            allR.addAll(u.getValue());
+        }
+        // percorre o arraylist das faturas e cria um array com nifs e um com gastos, na mesma ordem
+        for(int i=0;i<allR.size();i++) {
+            listaNIFS.add(allR.get(i).getNIFCliente());
+            listaGASTO.add(allR.get(i).getValor());
+            
+        }
+        // povoamento do mapa com nifs e valores a 0
+        for(int i=0;i<listaNIFS.size();i++) {
+            userGasto.put(i,0.0);
+        }
+        // percorre a lista de nifs e adiciona o valor respetivo da lista de gastos ao mapa no nif respetivo
+        for(int i=0;i<listaNIFS.size();i++) {
+            double tempVal = listaGASTO.get(i);
+            double valFinal = tempVal + userGasto.get(i);
+            userGasto.put(i,valFinal);
+        }
+        int count = 0;
+        while(!userGasto.isEmpty() && count<9) {
+            Map.Entry<Integer, Double> maxEntry = null;
+            int index = 0;
+            for(Map.Entry<Integer,Double> entry : userGasto.entrySet()) {
+                if(maxEntry==null || entry.getValue().compareTo(maxEntry.getValue())>0) {
+                    maxEntry = entry;
+                    index = entry.getKey();
+                }
+            }
+            out("NIF: " + index + "gastou "+maxEntry+"€");
+            count++;
+            userGasto.remove(index);
+            
+        }
+    }
+    
     
     /**
      * Edita a atividade de uma fatura, guardando o registo anterior 
@@ -405,7 +462,7 @@ public class Gestao implements java.io.Serializable{
     /**
      * Verifica o total faturado por uma empresa x dentro de um intervalo de tempo definido manualmente pelo utilizador
      * @param x NIF da empresa
-     * @param z	Lista das faturas da empresa
+     * @param z Lista das faturas da empresa
      */
     public void totalFaturado(int x, ArrayList<Fatura> z) {
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -434,16 +491,16 @@ public class Gestao implements java.io.Serializable{
      * @return Lista de faturas em que o NIF do Individual foi definido como cliente
      */
     public ArrayList<Fatura> listagemDespesas(int x) {
-    	ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
-    	for(Map.Entry<Integer,ArrayList<Fatura>> u : dadosFat.entrySet()){
-    		listaFaturas = u.getValue();
-    		for(int i=0; i<listaFaturas.size();i++) {
-    			if(listaFaturas.get(i).getNIFCliente()==x) {
-    				fatCliente.add(listaFaturas.get(i));
-    			}
-    		}
-    	}
-    	return fatCliente;
+        ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
+        for(Map.Entry<Integer,ArrayList<Fatura>> u : dadosFat.entrySet()){
+            listaFaturas = u.getValue();
+            for(int i=0; i<listaFaturas.size();i++) {
+                if(listaFaturas.get(i).getNIFCliente()==x) {
+                    fatCliente.add(listaFaturas.get(i));
+                }
+            }
+        }
+        return fatCliente;
     }
     
     
