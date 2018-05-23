@@ -27,7 +27,7 @@ public class Empresa implements java.io.Serializable{
         this.ffiscal = 0.0;
     }
     
-    public Empresa(int nif, String pass, String nome, String email, String morada, ArrayList<String> actividade, int fFiscal){
+    public Empresa(int nif, String pass, String nome, String email, String morada, ArrayList<String> actividade, double fFiscal){
         this.nif = nif;
         this.password = pass;
         this.nome = nome;
@@ -162,7 +162,8 @@ public class Empresa implements java.io.Serializable{
         out("\n\t Breve descriçao da despesa: "+descricao);
         out("\n\t Natureza da despesa: " + act);
         out("\n\t Valor da despesa: ");
-        double valor = input.nextDouble(); 
+        double valor = input.nextDouble();
+        valor = input.nextDouble();
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
         out("\n\t Nome da empresa: " +this.getNome());
@@ -238,9 +239,6 @@ public class Empresa implements java.io.Serializable{
     
     
     
-    
-    
-    
     public void imprimeFaturas(int x, ArrayList<Fatura> z) {
         Fatura f = new Fatura();
         menu.fatHeader();
@@ -266,5 +264,22 @@ public class Empresa implements java.io.Serializable{
             System.out.println(" * "+s);
     }
     
+    
+    
+    public void imprimeTotal(int nr ,double total){
+        String num = String.format("%04d", nr);
+        int nif = this.getNif();
+        String nome = this.getNome();
+        double deduzido = total*this.getFFiscal();
+        String designacao = nome.substring(0, Math.min(nome.length(), 10));
+        while(designacao.length()<10) {
+            designacao += " ";
+        }
+        out(num + "  | " +designacao+ " | " +nif+ " | " +deduzido+"€  / " +total+"€");
+        out("-----------------------------------------------------------------------------------");
+        
+    
+    }
+
 }
         

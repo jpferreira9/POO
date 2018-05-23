@@ -75,7 +75,9 @@ public class Menu implements java.io.Serializable{
         // determinar a relação dos 10 contribuintes que mais gastam em todo o sistema
         out("\n\t2) Verificar as X empresas com maior nº de faturas e as suas deduções fiscais");
         /* determinar a relação das X empresas que mais facturas em todo o sistema e o montante de deduções 
-         fiscais que as despesas registadas (dessas empresas) representam*/
+         fiscais que as despesas registadas (dessas empresas) representam
+         empresa: deducao/deducaoTotaldeTodas;
+         */
         out("\n\t3) Ver NIF's registados");
         out("\n\t4) Ver empresas registadas");
         out("\n\t5) Ver individuais registados");
@@ -122,10 +124,43 @@ public class Menu implements java.io.Serializable{
         out("--------------------------------------------------------------------------------------------------------");
     }
     
+    public void fatHeader2() {
+        out("--------------------------------------------------------------------------------------------------------");
+        out("            |           |             |            |            |");
+        out("  Vendedor  |    NIF    |    Data     | Descrição  | Actividade |    Valor  ");
+        out("            |           |             |            |            |");
+        out("--------------------------------------------------------------------------------------------------------");
+    }
+    
+    public void impFat2(String nomeVendedor, int nifVendedor, LocalDate dataF, String desc, double v, String activ) {
+        String nomeF = nomeVendedor.substring(0, Math.min(nomeVendedor.length(), 10));
+        String descF = desc.substring(0, Math.min(desc.length(), 10));
+        String activF = activ.substring(0, Math.min(activ.length(), 10));
+        while(nomeF.length()<10) {
+            nomeF += " ";
+        }
+        while(descF.length()<10) {
+            descF += " ";
+        }
+        while(activF.length()<10) {
+            activF += " ";
+        }
+        out(nomeF+ " | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " | " +v+"€ ");
+        out("--------------------------------------------------------------------------------------------------------");
+    }
+    
+    
+    public void fatHeader3() {
+        out("------------------------------------------------------------------------------------");
+        out("      |            |           |");
+        out("  Nº  |  Vendedor  |    NIF    |    Valor deduzido / Valor Total  ");
+        out("      |            |           |");
+        out("------------------------------------------------------------------------------------");
+    }
     
     public void sair(){
         clear();
-        out("\n\n\tObrigado pela oferta ao estado.");
+        out("\n\n\tObrigado pela dadiva ao estado.");
     }
     
 }

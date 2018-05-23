@@ -1,6 +1,14 @@
 import java.util.*;
 import java.io.*;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+/** JavaFatura
+ * @author Francisco Correia
+ * @author João Ferreira
+ * @author Luís Félix
+ *
+ */
 
 public class Gestao implements java.io.Serializable{
     Empresa emp = new Empresa();
@@ -9,28 +17,64 @@ public class Gestao implements java.io.Serializable{
     Menu menu = new Menu();
     Dados dados = new Dados();   
     Scanner in = new Scanner(System.in);
-
-    HashMap<Integer,String> users =  new HashMap<Integer,String>();
-    HashMap<Integer,Empresa> dadosEmp = new HashMap<Integer,Empresa>();
-    HashMap<Integer,Individual> dadosInd = new HashMap<Integer, Individual>();
-    HashMap<Integer,ArrayList<Fatura>> dadosFat = new HashMap<Integer,ArrayList<Fatura>>();
+    
+    /**
+     * Lista de faturas de uma dada empresa
+     */
     ArrayList<Fatura> listaFaturas = new ArrayList<Fatura>();
     
+    /**
+     * Mapa que contem users do programa para fins de login (guarda NIF e Password)
+     */
+    HashMap<Integer,String> users =  new HashMap<Integer,String>();
+    
+    /**
+     * Mapa que contem NIF e dados da empresa (guarda o NIF como key para acesso mais facil)
+     */
+    HashMap<Integer,Empresa> dadosEmp = new HashMap<Integer,Empresa>();
+    
+    /**
+     * Mapa que contem NIF e dados de um individuo (guarda o NIF como key para acesso mais facil)
+     */
+    HashMap<Integer,Individual> dadosInd = new HashMap<Integer, Individual>();
+    
+    /**
+     * Mapa que contem NIF de uma empresa e um arrayList de faturas emitidas pela mesma
+     */
+    HashMap<Integer,ArrayList<Fatura>> dadosFat = new HashMap<Integer,ArrayList<Fatura>>();
+    
+    /**
+     * Mapa que contem distrito e taxa de deduçao para o mesmo
+     */
     final HashMap<String,Double> dadosDistr = dados.povDistritos();
+    
+    /**
+     * Mapa que contem atividade e taxa de deduçao para a mesma
+     */
     final HashMap<String,Double> dadosActiv = dados.povAtividades();
     
-
-    
+    /**
+     * "Substitui" o System.out.println()
+     * @param o objecto dado para imprimir
+     */
     public void out(Object o){
         System.out.println(o.toString());
     }
     
+    /**
+     * Verifica se um NIF é considerado válido segundo os critérios do Portal das Finanças
+     * @param x NIF dado
+     * @return true se o NIF é válido e false caso contrário
+     */
     public boolean nifValido(int x){
         int z = x/100000000;
         if(x == 1234 || (z > 0.9 && z < 10 && (z < 3|| z >= 5 || z < 7 || z >= 8))) return true;
         else return false;
     }
     
+    /**
+     * Elimina os dados guardados
+     */
     public void limparDados(){
         while(true){
             menu.limpaDados();
@@ -83,6 +127,9 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Interpreta o menu do administrador
+     */
     public void admin(){
        while(true){ 
             menu.admin();
@@ -94,6 +141,32 @@ public class Gestao implements java.io.Serializable{
                case 2:
                     out("\n\tQUANTAS EMPRESAS?");
                     int num = in.nextInt();
+                    
+                    HashMap<Integer,ArrayList<Fatura>> clonefats = new HashMap<Integer,ArrayList<Fatura>>();
+                    clonefats = (HashMap)dadosFat.clone();
+                    ArrayList<Integer> nifMaisFats = new ArrayList<Integer>();
+                    int c = 0;
+                    while(c < num && clonefats!=null){
+                        int maior = maior(clonefats);
+                        nifMaisFats.add(maior);
+                        clonefats.remove(maior);
+                        c++;
+                    }
+                    ArrayList<Fatura> receipt = new ArrayList<Fatura>();
+                    int i=0;
+                    double total = 0;
+                    menu.clear();
+                    menu.fatHeader3();
+                    for(Integer n: nifMaisFats){
+                        receipt = dadosFat.get(n);
+                        total = valorTotalNif(receipt);
+                        dadosEmp.get(n).imprimeTotal(i,total);
+                        i++;
+                    }
+                    
+                    out("Prima qualquer nr para continuar");
+                    in.nextInt();
+                    
                     break;
                     
                case 3:
@@ -131,13 +204,22 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Interpreta o menu de um utilizador individual
+     * @param x NIF dado
+     */
     public void individual(int x){
         while(true){
             menu.individual(x);
             switch(in.nextInt()){
                 case 1:
-                    out("\nLISTA DE DESPESAS:");
-                    break;
+                    out("\nLista de despesas:");
+                    ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
+                    fatCliente = listagemDespesas(x);
+                    menu.fatHeader2();
+                    for(Fatura f : fatCliente)
+                    	menu.impFat2(f.getDEmitente(),f.getNIFEmitente(),f.getData(), f.getDescricao(), f.getValor(), f.getAtividade());	
+                break;
                 
                 case 2:
                     out("\nDEDUCAO FISCAL ACUMULADA:");
@@ -156,6 +238,10 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Interpreta o menu de um utilizador Empresa
+     * @param x NIF dado
+     */
     public void empresa(int x){
         while(true){         
             menu.empresa(x);
@@ -186,9 +272,9 @@ public class Gestao implements java.io.Serializable{
                     
                 case 3:
                     menu.clear();
-                    out("\nLista de faturas:");
+                    out("\n\tLista de faturas:");
                     if(dadosFat.get(x) == null)
-                        out("Nao existem faturas registadas nesta Empresa");
+                        out("\n\t ***** Nao existem faturas registadas nesta Empresa *****");
                     else{
                         dadosEmp.get(x).imprimeFaturas(x,dadosFat.get(x));
                     }
@@ -196,10 +282,30 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                 case 4:
-                    out("\nINTRODUZIR NUMERO CONTRIBUINTE");
-                    
-                    out("\nIntroduzir data:");
-                    
+                    out("\nIntroduzir número de contribuinte:");
+                    int y = in.nextInt();
+                    while(nifValido(y)==false) {
+                    	out("NIF inválido, tente novamente");
+                    	y = in.nextInt();
+                    }
+                    DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    out("\nIntroduzir data inicial (dd/MM/yyyy):");
+                    String inicio = in.nextLine();
+                    inicio = in.nextLine();
+                    LocalDate date1 = null;
+                    date1 = LocalDate.parse(inicio, sdf);
+                    out("\nIntroduzir data final (dd/MM/yyyy):");
+                    String fim= in.nextLine();
+                    LocalDate date2 = null;
+                    date2 = LocalDate.parse(fim, sdf);
+                    double tot = 0;
+                    for(int i=0;i<listaFaturas.size();i++) {
+                    	fat = listaFaturas.get(i);
+                    	if(fat.getNIFEmitente()==x && fat.getNIFCliente()==y && fat.getData().isBefore(date2) && fat.getData().isAfter(date1)) {
+                    	    tot += fat.getValor();
+                    	}
+                    }
+                    out("O NIF "+y+ " gastou "+tot+"€ entre "+inicio+ " e " + fim);
                     break;
                     
                 case 5:
@@ -215,7 +321,7 @@ public class Gestao implements java.io.Serializable{
                     dadosEmp.get(x).imprimeActivs();
 
                         
-                    out("\n\n\n\n\n\t\tPRIMA QUALQUER NUMERO PARA VOLTAR ATRAS");
+                    out("\n\n\n\n\n\t\tPrima qualquer numero para voltar atras");
                     in.nextInt();
                     break;
                     
@@ -229,6 +335,12 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Edita a atividade de uma fatura, guardando o registo anterior 
+     * (poe valor a 0 por motivos de calculo) e acrescenta a fatura editada
+     * @param fats array das faturas
+     * @return array das faturas com a nova fatura acrescentada
+     */
     public ArrayList<Fatura> editar(ArrayList<Fatura> fats){
         menu.clear();
         out("\n\tIntroduza o numero da fatura que pretende mudar a atividade");
@@ -245,7 +357,6 @@ public class Gestao implements java.io.Serializable{
                 if(i==nr){
                     f = fat.clone();
                     fat.setValor(0.0);
-    
                     break;
                 }
                 i++;
@@ -264,7 +375,84 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Indica qual o NIF da Empresa com mais faturas
+     * @param cloneFats clone do map de todas as faturas registadas
+     * @return nif com mais faturas
+     */
+    public int maior(HashMap<Integer,ArrayList<Fatura>> cloneFats){
+        int max = 0;
+        for(Map.Entry<Integer,ArrayList<Fatura>> u : cloneFats.entrySet())
+            if(u.getValue().size() > max)
+                max = u.getKey();
+        
+        return max;
+    }
     
+    /**
+     * Calcula o valor total de todas as faturas
+     * @param arrayFat array de faturas
+     * @return soma do valor de todas as faturas
+     */
+    public double valorTotalNif(ArrayList<Fatura> arrayFat){
+        double valor = 0;
+        for(Fatura f: arrayFat){
+            valor += f.getValor();
+        }
+        return valor;
+    }
+    
+    /**
+     * Verifica o total faturado por uma empresa x dentro de um intervalo de tempo definido manualmente pelo utilizador
+     * @param x NIF da empresa
+     * @param z	Lista das faturas da empresa
+     */
+    public void totalFaturado(int x, ArrayList<Fatura> z) {
+        DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        out("\nIntroduzir data inicial (dd/MM/yyyy):");
+        String inicio = in.nextLine();
+        inicio = in.nextLine();
+        LocalDate date1 = null;
+        date1 = LocalDate.parse(inicio, sdf);
+        out("\nIntroduzir data final (dd/MM/yyyy):");
+        String fim= in.nextLine();
+        LocalDate date2 = null;
+        date2 = LocalDate.parse(fim, sdf);
+        double total = 0;    
+            for(int i=0;i<z.size();i++) {
+                fat = z.get(i);
+                if(fat.getNIFEmitente()==x && fat.getData().isBefore(date2) && fat.getData().isAfter(date1)) {
+                    total += fat.getValor();
+                }
+            }
+        System.out.println("Total faturado pela empresa no intervalo: "+ total + "€");
+    }
+    
+    /**
+     * Verifica, por parte do contribuinte individual, as despesas que foram emitidas em seu nome 
+     * @param x NIF de um Individual
+     * @return Lista de faturas em que o NIF do Individual foi definido como cliente
+     */
+    public ArrayList<Fatura> listagemDespesas(int x) {
+    	ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
+    	for(Map.Entry<Integer,ArrayList<Fatura>> u : dadosFat.entrySet()){
+    		listaFaturas = u.getValue();
+    		for(int i=0; i<listaFaturas.size();i++) {
+    			if(listaFaturas.get(i).getNIFCliente()==x) {
+    				fatCliente.add(listaFaturas.get(i));
+    			}
+    		}
+    	}
+    	return fatCliente;
+    }
+    
+    
+    
+    
+    /**
+     * Interpreta o menu das atividades e adiciona a um ArrayList as atividades o utilizador considera relevantes a empresa
+     * @param ativs ArrayList que contem Strings de atividades
+     */
     public void atividades(ArrayList ativs){
         out("####### Selecione a(s) atividade(s): #######");
         menu.menu_ativs();
@@ -463,10 +651,10 @@ public class Gestao implements java.io.Serializable{
     }
     
     /**
-     * Gravar os utilizadores criados em ficheiro,
+     * Gravar os utilizadores criados em ficheiro binario,
      * para que seja possível retomar mais tarde a execução
+     * @param utilizadores - map onde estao registados todos os utilizadores
      */
-        
     public void saveUsers(HashMap<Integer,String> utilizadores){   
         try{
             File userList = new File("userList");
@@ -485,7 +673,6 @@ public class Gestao implements java.io.Serializable{
     /**
      * Ler os utilizadores em ficheiro
      */
-    
     public void loadUsers(){        
         try{
             File toRead = new File("userList");
@@ -501,9 +688,8 @@ public class Gestao implements java.io.Serializable{
     }
     
     /**
-     * Apagar dados para login de utilizadores
+     * Apagar dados para utilizadores
      */
-    
     public void resetUsers(){
         File userList = new File("userList");
         userList.delete();
@@ -512,8 +698,8 @@ public class Gestao implements java.io.Serializable{
      /**
      * Gravar os dados dos NIF's Individuais criados em ficheiro,
      * para que seja possível retomar mais tarde a execução
+     * @param indiv - map onde estao registados todos os individuais
      */
-        
     public void saveIndividual(HashMap<Integer,Individual> indiv){   
         try{
             File indivList = new File("indivList");
@@ -654,7 +840,10 @@ public class Gestao implements java.io.Serializable{
     }
     
     
-    
+    /**
+     * Imprime dados de login de todos os utilizadores registados (NIF e Password) 
+     * @param map mapa de utilizadores
+     */
     public void mapPrint(HashMap<Integer,String> map){
         for(Map.Entry<Integer,String> u : map.entrySet()){
                 out(" Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
