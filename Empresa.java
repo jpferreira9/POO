@@ -9,12 +9,13 @@ public class Empresa implements java.io.Serializable{
     private String morada;
     private String password;
     private ArrayList<String> activ;
-    private int ffiscal;
+    private double ffiscal;
     
     Menu menu = new Menu();
     public void out(Object o){
         System.out.println(o);
     }
+    
     
     public Empresa(){
         this.nif = 0;
@@ -23,7 +24,7 @@ public class Empresa implements java.io.Serializable{
         this.email = "";
         this.morada = "";
         this.activ = new ArrayList<String>(0);
-        this.ffiscal = 1;
+        this.ffiscal = 0.0;
     }
     
     public Empresa(int nif, String pass, String nome, String email, String morada, ArrayList<String> actividade, int fFiscal){
@@ -64,9 +65,8 @@ public class Empresa implements java.io.Serializable{
         return atividade;
     }
     
-    public int getFFiscal(){ return this.ffiscal;}
-    
-    
+    public double getFFiscal(){ return this.ffiscal;}
+
     public void setNif (int novoNif){ this.nif = novoNif; }
     
     public void setEmail (String novoEmail){ this.email = novoEmail; }
@@ -83,7 +83,7 @@ public class Empresa implements java.io.Serializable{
             this.activ.add(s);
     }
     
-    public void setFFiscal(int novoffiscal){ this.ffiscal = novoffiscal; }
+    public void setFFiscal(double novoffiscal){ this.ffiscal = novoffiscal; }
     
     public boolean equals (Object o){
         if(this==o) return true;
@@ -117,6 +117,12 @@ public class Empresa implements java.io.Serializable{
         return new Empresa(this);
     }
     
+    public boolean nifValido(int x){
+        int z = x/100000000;
+        if(x == 1234 || (z > 0.9 && z < 10 && (z < 3|| z >= 5 || z < 7 || z >= 8))) return true;
+        else return false;
+    }
+    
     //ver se funciona
     public Fatura criarFatura(){
         LocalDate now = LocalDate.now();
@@ -124,48 +130,104 @@ public class Empresa implements java.io.Serializable{
                 
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
-        out("\n\t1 Nome da empresa: " +this.getNome());
-        out("\n\t2 Data da despesa: " +now);
-        out("\n\t3 Nif do Cliente: ");
+        out("\n\t Nome da empresa: " +this.getNome());
+        out("\n\t Data da despesa: " +now);
+        out("\n\t Nif do Cliente: ");
         int nifCliente = input.nextInt();
+        while(!nifValido(nifCliente)){
+            out("NIF invalido, tente novamente");
+            nifCliente = input.nextInt();
+        }
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
-        out("\n\t1 Nome da empresa: " +this.getNome());
-        out("\n\t2 Data da despesa: " +now);
-        out("\n\t3 Nif do Cliente: " +nifCliente);
-        out("\n\t4 Breve descriçao da despesa: ");
+        out("\n\t Nome da empresa: " +this.getNome());
+        out("\n\t Data da despesa: " +now);
+        out("\n\t Nif do Cliente: " +nifCliente);
+        out("\n\t Breve descriçao da despesa: ");
         String descricao = input.next();
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
-        out("\n\t1 Nome da empresa: " +this.getNome());
-        out("\n\t2 Data da despesa: " +now);
-        out("\n\t3 Nif do Cliente: " +nifCliente);
-        out("\n\t4 Breve descriçao da despesa: "+descricao);
-        out("\n\t5 Natureza da despesa: ");
-        String act = input.nextLine();
-        act = input.nextLine();
+        out("\n\t Nome da empresa: " +this.getNome());
+        out("\n\t Data da despesa: " +now);
+        out("\n\t Nif do Cliente: " +nifCliente);
+        out("\n\t Breve descriçao da despesa: "+descricao);
+        out("\n\t Natureza da despesa: ");
+        String act = "";
+        act = select_activ(act);
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
-        out("\n\t1 Nome da empresa: " +this.getNome());
-        out("\n\t2 Data da despesa: " +now);
-        out("\n\t3 Nif do Cliente: " +nifCliente);
-        out("\n\t4 Breve descriçao da despesa: "+descricao);
-        out("\n\t5 Natureza da despesa: " + act);
-        out("\n\t6 Valor da despesa: ");
+        out("\n\t Nome da empresa: " +this.getNome());
+        out("\n\t Data da despesa: " +now);
+        out("\n\t Nif do Cliente: " +nifCliente);
+        out("\n\t Breve descriçao da despesa: "+descricao);
+        out("\n\t Natureza da despesa: " + act);
+        out("\n\t Valor da despesa: ");
         double valor = input.nextDouble(); 
         menu.clear();
         out("\n\t NIF da empresa:" +this.getNif());
-        out("\n\t1 Nome da empresa: " +this.getNome());
-        out("\n\t2 Data da despesa: " +now);
-        out("\n\t3 Nif do Cliente: " +nifCliente);
-        out("\n\t4 Breve descriçao da despesa: "+descricao);
-        out("\n\t5 Natureza da despesa: " + act);
-        out("\n\t6 Valor da despesa: " + valor);
+        out("\n\t Nome da empresa: " +this.getNome());
+        out("\n\t Data da despesa: " +now);
+        out("\n\t Nif do Cliente: " +nifCliente);
+        out("\n\t Breve descriçao da despesa: "+descricao);
+        out("\n\t Natureza da despesa: " + act);
+        out("\n\t Valor da despesa: " + valor);
         
         Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, act, valor);        
         
         System.out.println(fat.toString());
         return fat;
+        
+    }
+    
+    
+    public String select_activ(String activ){
+        menu.menu_ativs();
+        Scanner in = new Scanner(System.in);
+        while(true){
+            switch(in.nextInt()){
+                case 1:
+                    activ = "Cabeleireiros";                
+                    return activ;
+                case 2:
+                    activ = "Despesas Familiares";
+                    return activ;
+                case 3:
+                    activ = "Educação";
+                    return activ;
+                case 4:
+                    activ = "Habitação";
+                    return activ;
+                case 5:
+                    activ = "Lares";
+                    return activ;
+                case 6:
+                    activ = "Passes Mensais";
+                    return activ;
+                case 7:
+                    activ = "Reparações Automóvel";
+                    return activ;
+                case 8:
+                    activ = "Reparações Motorizadas";
+                    return activ;
+                case 9:
+                    activ = "Restauração e Alojamento";
+                    return activ;
+                case 10:
+                    activ = "Saúde";
+                    return activ;
+                case 11:
+                    activ = "Veterinários";
+                    return activ;
+                case 12:
+                    activ = "Outros";
+                    return activ;
+                case 0:
+                    return activ;
+                default:
+                    out("Opção inválida");
+                    break;
+            }
+        }
     }
     
     
@@ -195,7 +257,6 @@ public class Empresa implements java.io.Serializable{
             }
         }
     }
-    
     
     /**
      * Imprime atividades da Empresa

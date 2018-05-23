@@ -23,7 +23,7 @@ public class Menu implements java.io.Serializable{
     
     public void individual(int nif){
         clear();
-        out("\n\t ####### Bem vindo\n\n\n\nEscolha a sua opção: #######");
+        out("\n\t ####### Bem vindo #######\n\n\n\nEscolha a sua opção:");
         out("\n\t1) Verificar despesas"); 
         //verificar, por parte do contribuinte individual, as despesas que foram emitidas em seu nome 
         out("\n\t2) Verificar dedução fiscal acumulada");
@@ -31,29 +31,21 @@ public class Menu implements java.io.Serializable{
         out("\n\n\t0) Sair");
     }
     
-    public void atividadesP1(){
+    public void menu_ativs(){
         clear();
-        out("####### Selecione a(s) atividade(s): #######");
+        out("####### Selecione a atividade: #######");
         out("\n\t1) Cabeleireiros");
-        out("\n\t2) Despesas Familiares");
-        out("\n\t3) Educação");
-        out("\n\t4) Habitação");
-        out("\n\t5) Lares");
-        out("\n\t6) Passes Mensais");
-        out("\n\t9) Página Seguinte ----->");
-        out("\n\t0) Sair");
-    }
-    
-    public void atividadesP2(){
-        clear();
-        out("Selecione a(s) atividade(s):");
-        out("\n\t1) Reparação Automóvel");
-        out("\n\t2) Reparação Motorizadas");
-        out("\n\t3) Restauração & Alojamento");
-        out("\n\t4) Saúde");
-        out("\n\t5) Veterinários");
-        out("\n\t6) Outros");
-        out("\n\t9) <----- Página Anterior");
+        out("\t2) Despesas Familiares");
+        out("\t3) Educação");
+        out("\t4) Habitação");
+        out("\t5) Lares");
+        out("\t6) Passes Mensais");
+        out("\t7) Reparação Automóvel");
+        out("\t8) Reparação Motorizadas");
+        out("\t9) Restauração & Alojamento");
+        out("\t10) Saúde");
+        out("\t11) Veterinários");
+        out("\t12) Outros");
         out("\n\t0) Sair");
     }
     
