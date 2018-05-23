@@ -1,6 +1,4 @@
 import java.time.LocalDate;
-import java.util.*;
-
 public class Menu implements java.io.Serializable{	
 	private static final long serialVersionUID = -5061463634023283339L;
 
@@ -71,9 +69,16 @@ public class Menu implements java.io.Serializable{
         clear();
         out("\n\t Bem vindo ADMIN\n\n\n\nEscolha a sua opção:");
         out("\n\t1) Verificar 10 contribuintes que mais gastam");
+        // determinar a relação dos 10 contribuintes que mais gastam em todo o sistema
         out("\n\t2) Verificar as X empresas com maior nº de faturas e as suas deduções fiscais");
-        out("\n\t3) Limpar dados");
-        out("\n\t4) Imprimir lista de utilizadores");
+        /* determinar a relação das X empresas que mais facturas em todo o sistema e o montante de deduções 
+         fiscais que as despesas registadas (dessas empresas) representam
+         empresa: deducao/deducaoTotaldeTodas;
+         */
+        out("\n\t3) Ver NIF's registados");
+        out("\n\t4) Ver empresas registadas");
+        out("\n\t5) Ver individuais registados");
+        out("\n\t7) Limpar dados");
         out("\n\n\t0) Sair");
     }
     
@@ -139,6 +144,14 @@ public class Menu implements java.io.Serializable{
     	}
     	out(nomeF+ " | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " | " +v+"€ ");
     	out("--------------------------------------------------------------------------------------------------------");
+    }
+    
+    public void fatHeader3() {
+        out("------------------------------------------------------------------------------------");
+        out("      |            |           |");
+        out("  Nº  |  Vendedor  |    NIF    |    Valor deduzível / Valor Total  ");
+        out("      |            |           |");
+        out("------------------------------------------------------------------------------------");
     }
     
     public void sair(){
