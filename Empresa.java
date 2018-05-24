@@ -261,11 +261,10 @@ public class Empresa implements java.io.Serializable{
             System.out.println(" * "+s);
     }
 
-    public void imprimeTotal(int nr ,double total){
+    public void imprimeTotal(int nr ,double total, double deduzido){
         String num = String.format("%04d", nr);
         int nif = this.getNif();
         String nome = this.getNome();
-        double deduzido = total*this.getFFiscal();
         String designacao = nome.substring(0, Math.min(nome.length(), 10));
         while(designacao.length()<10) {
             designacao += " ";

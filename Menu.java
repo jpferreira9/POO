@@ -24,11 +24,12 @@ public class Menu implements java.io.Serializable{
     public void individual(int nif){
         clear();
         out("\n\t ####### Bem vindo #######\n\n\n\n\tEscolha a sua opção:");
-        out("\n\t1) Verificar despesas"); 
+        out("\n\t1) Ver os seus dados");
+        out("\n\t2) Verificar despesas"); 
         //verificar, por parte do contribuinte individual, as despesas que foram emitidas em seu nome 
-        out("\n\t2) Verificar dedução fiscal acumulada");
+        out("\n\t3) Verificar dedução fiscal acumulada");
         // verificar o montante de dedução fiscal acumulado, por si e pelo agregado familiar;
-        out("\n\t3) Editar fatura"); 
+        out("\n\t4) Editar fatura"); 
         /* associar/editar classificação de actividade económica a um documento de despesa
         deve deixar registo para ser depois rastreada */
         out("\n\n\t0) Sair");
@@ -55,19 +56,20 @@ public class Menu implements java.io.Serializable{
     public void empresa(int nif){
         clear();
         out("\n\t Bem vindo\n\n\n\nEscolha a sua opção:");
-        out("\n\t1) Criar fatura"); 
+        out("\n\t1) Ver os seus dados");
+        out("\n\t2) Criar fatura"); 
         //criar facturas associadas a despesas feitas por um contribuinte individual
-        out("\n\t2) Editar fatura"); 
+        out("\n\t3) Editar fatura"); 
         /* associar/editar classificação de actividade económica a um documento de despesa
         deve deixar registo para ser depois rastreada */
-        out("\n\t3) Verificar faturas emitidas"); 
+        out("\n\t4) Verificar faturas emitidas"); 
         //obter a listagem das facturas todas de uma determinada empresa, ordenada por data de emissão ou por valor
-        out("\n\t4) Verificar faturas de contribuinte"); 
+        out("\n\t5) Verificar faturas de contribuinte"); 
         /* obter por parte das empresas, as listagens das facturas por contribuinte num determinado intervalo de datas
          obter por parte das empresas, as listagens das facturas por contribuinte ordenadas por valor decrescente de despesa */
-        out("\n\t5) Verificar total faturado"); 
+        out("\n\t6) Verificar total faturado"); 
         // indicar o total facturado por uma empresa num determinado período
-        out("\n\t6) Ver lista das atividades da empresa");
+        out("\n\t7) Ver lista das atividades da empresa");
         out("\n\n\t0) Sair");
     }
     
@@ -84,6 +86,7 @@ public class Menu implements java.io.Serializable{
         out("\n\t3) Ver NIF's registados");
         out("\n\t4) Ver empresas registadas");
         out("\n\t5) Ver individuais registados");
+        out("\n\t6) Ver faturas registados");
         out("\n\t7) Limpar dados");
         out("\n\n\t0) Sair");
     }
@@ -92,8 +95,9 @@ public class Menu implements java.io.Serializable{
         clear();
         out("\n\t\t\t####### LIMPAR DADOS #######\n\n");
         out("\t1) Eliminar todos os dados");
-        out("\t2) Eliminar dados das Empresas");
-        out("\t3) Eliminar dados Individuais");
+        out("\t2) Eliminar dados das Individuais");
+        out("\t3) Eliminar dados Empresas");
+        out("\t4) Eliminar dados Faturas");
         out("\n\t0) Voltar atras");
     }
     
@@ -128,11 +132,11 @@ public class Menu implements java.io.Serializable{
     }
     
     public void fatHeader2() {
-        out("--------------------------------------------------------------------------------------------------------");
+        out("-----------------------------------------------------------------------------------------");
         out("            |           |             |            |            |               |");
-        out("  Vendedor  |    NIF    |    Data     | Descrição  | Actividade |  Taxa deduçao |   Valor  ");
+        out("  Vendedor  |    NIF    |    Data     | Descrição  | Actividade |   Valor  ");
         out("            |           |             |            |            |               |");
-        out("--------------------------------------------------------------------------------------------------------");
+        out("-----------------------------------------------------------------------------------------");
     }
     
     public void impFat2(String nomeVendedor, int nifVendedor, LocalDate dataF, String desc, double v, String activ) {
@@ -148,7 +152,7 @@ public class Menu implements java.io.Serializable{
         while(activF.length()<10) {
             activF += " ";
         }
-        out(nomeF+ " | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " |  " +v+"€ ");
+        out(nomeF+ "  | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " |  " +v+"€ ");
         out("--------------------------------------------------------------------------------------------------------");
     }
     
