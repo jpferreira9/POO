@@ -102,14 +102,14 @@ public class Menu implements java.io.Serializable{
     }
     
     public void fatHeader() {
-        out("--------------------------------------------------------------------------------------------------------");
-        out("      |            |           |             |             |            |            |");
-        out("  Nº  |  Vendedor  |    NIF    |    Data     | NIF Cliente | Descrição  | Actividade |    Valor  ");
-        out("      |            |           |             |             |            |            |");
-        out("--------------------------------------------------------------------------------------------------------");
+        out("-----------------------------------------------------------------------------------------------------------------------------");
+        out("      |            |           |             |             |            |            |                |");
+        out("  Nº  |  Vendedor  |    NIF    |    Data     | NIF Cliente | Descrição  | Actividade |  Taxa deducao  |  Valor  ");
+        out("      |            |           |             |             |            |            |                |");
+        out("-----------------------------------------------------------------------------------------------------------------------------");
     }
     
-    public void impFat(int numFat, int nifE, String nome, LocalDate dataF, int nifC, String desc, double v, String activ) {
+    public void impFat(int numFat, int nifE, String nome, LocalDate dataF, int nifC, String desc, double v, String activ, double deducao) {
         String numFatF = String.format("%04d", numFat);
         String nomeF = nome.substring(0, Math.min(nome.length(), 10));
         String descF = desc.substring(0, Math.min(desc.length(), 10));
@@ -123,15 +123,15 @@ public class Menu implements java.io.Serializable{
         while(activF.length()<10) {
             activF += " ";
         }
-        out(numFatF + "  | " +nomeF+ " | " +nifE+ " |  " +dataF+" | " +nifC+ "   | " +descF+ " | " +activF+ " | " +v+"€ ");
-        out("--------------------------------------------------------------------------------------------------------");
+        out(numFatF + "  | " +nomeF+ " | " +nifE+ " |  " +dataF+" | " +nifC+ "   | " +descF+ " | " +activF+ " |     "+(deducao*100)+"%      |   "  +v+"€ ");
+        out("-----------------------------------------------------------------------------------------------------------------------------");
     }
     
     public void fatHeader2() {
         out("--------------------------------------------------------------------------------------------------------");
-        out("            |           |             |            |            |");
-        out("  Vendedor  |    NIF    |    Data     | Descrição  | Actividade |    Valor  ");
-        out("            |           |             |            |            |");
+        out("            |           |             |            |            |               |");
+        out("  Vendedor  |    NIF    |    Data     | Descrição  | Actividade |  Taxa deduçao |   Valor  ");
+        out("            |           |             |            |            |               |");
         out("--------------------------------------------------------------------------------------------------------");
     }
     
@@ -148,7 +148,7 @@ public class Menu implements java.io.Serializable{
         while(activF.length()<10) {
             activF += " ";
         }
-        out(nomeF+ " | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " | " +v+"€ ");
+        out(nomeF+ " | " +nifVendedor+ " |  " +dataF+" | " +descF+ " | " +activF+ " |  " +v+"€ ");
         out("--------------------------------------------------------------------------------------------------------");
     }
     

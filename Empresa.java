@@ -178,7 +178,7 @@ public class Empresa implements java.io.Serializable{
         out("\n\t Natureza da despesa: " + act);
         out("\n\t Valor da despesa: " + valor);
         
-        Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, act, valor, this.getFFiscal());
+        Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, act, valor, this.getFFiscal());        
         
         System.out.println(fat.toString());
         return fat;
@@ -247,7 +247,8 @@ public class Empresa implements java.io.Serializable{
                 LocalDate dT = f.getData();
                 double v = f.getValor();
                 String act = f.getAtividade();
-                menu.impFat(i+1,x,n,dT,nC,desc,v,act);
+                double ded = f.getDeducao();
+                menu.impFat(i+1,x,n,dT,nC,desc,v,act,ded);
             }
         }
     }
