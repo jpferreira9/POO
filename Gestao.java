@@ -74,6 +74,14 @@ public class Gestao implements java.io.Serializable{
     }
     
     /**
+     * Aguarda input do utilizador
+     */
+    public void inputWait() {
+        out("Pressione qualquer tecla para continuar");
+        in.next();
+    }
+    
+    /**
      * Elimina os dados guardados
      */
     public void limparDados(){
@@ -136,12 +144,15 @@ public class Gestao implements java.io.Serializable{
             menu.admin();
             switch(in.nextInt()){
                case 1:
+                    menu.clear();
                     out("\n\tOs 10 Contribuintes com mais despesas:");
                     maisDespesas();
+                    inputWait();
                     break;
                
                case 2:
-                    out("\n\tQUANTAS EMPRESAS?");
+                    menu.clear();
+                    out("\n\tQuantas empresas deseja verificar?");
                     int num = in.nextInt();
                     
                     HashMap<Integer,ArrayList<Fatura>> clonefats = new HashMap<Integer,ArrayList<Fatura>>();
@@ -168,31 +179,28 @@ public class Gestao implements java.io.Serializable{
                         }
                         else break;
                     }
-                    
-                    out("\n\t\tPrima qualquer nr para continuar");
-                    in.nextInt();
-                    
+                    inputWait();
                     break;
                     
                case 3:
                     menu.clear();
                     out("\n\tUtilizadores registados:\n");
                     mapPrint(users);
-                    in.nextInt();
+                    inputWait();
                     break;
                     
                case 4:
                     menu.clear();
                     out("\n\tEmpresas Registadas:\n");
                     System.out.println(dadosEmp.toString());
-                    in.nextInt();
+                    inputWait();
                     break;
                     
                case 5:
                     menu.clear();
                     out("\n\tIndividuais Registados:\n");
                     System.out.println(dadosInd.toString());
-                    in.nextInt();
+                    inputWait();
                     break;
                     
                case 7:
@@ -218,30 +226,57 @@ public class Gestao implements java.io.Serializable{
             menu.individual(x);
             switch(in.nextInt()){
                 case 1:
+                    menu.clear();
                     out("\nLista de despesas:");
                     ArrayList<Fatura> fatCliente = new ArrayList<Fatura>();
                     fatCliente = listagemDespesas(x);
                     menu.fatHeader2();
                     for(Fatura f : fatCliente)
                         menu.impFat2(f.getDEmitente(),f.getNIFEmitente(),f.getData(), f.getDescricao(), f.getValor(), f.getAtividade());    
-                break;
+                    
+                    inputWait();
+                    break;
                 
                 case 2:
                     menu.clear();
                     out("\n\t\tDeducao fiscal acumulada:");
-                    //ver se realmente e isto
+                    
                     fatCliente = listagemDespesas(x);
                     double total = 0;
                     for(Fatura f: fatCliente)
                         total += f.getValor();
                     double coeficiente = dadosInd.get(x).getCoef();
+                    double deduzivel = 500*coeficiente;
+                    if(deduzivel>total){
+                        deduzivel = total*coeficiente;
+                    }
+                    
                     out("\n\t O seu coeficiente fiscal: "+coeficiente);
                     out("Valor total faturado: " +total);
-                    out("Valor total deduzido: " +(total*coeficiente));
-                    out("\n\n\t\t prima qualquer nr para continuar");
-                    in.nextInt();
+                    out("Valor total deduzivel: " +deduzivel);
+                    inputWait();
                     break;
                 
+                case 3:
+                    ArrayList<Fatura> novasFats = new ArrayList<Fatura>();
+                    boolean existe = false;
+                    for(Map.Entry<Integer,ArrayList<Fatura>> entry : dadosFat.entrySet()){
+                        if(temPendente(x,entry.getValue())){
+                            novasFats = editar2(x,dadosEmp.get(entry.getKey()), entry.getValue());
+                            existe = true;
+                            dadosFat.put(entry.getKey(),novasFats);
+                        }
+                    }
+                    
+                    if(!existe){
+                        menu.clear();
+                        out("\n\n\t Nao tem faturas que precisem de validacao");
+                    }
+                    
+                    inputWait();
+                    saveFaturas(dadosFat);
+                    break;
+                    
                 case 0:
                     return;
                     
@@ -259,12 +294,13 @@ public class Gestao implements java.io.Serializable{
     public void empresa(int x){
         while(true){         
             menu.empresa(x);
-                //System.out.println(x);
-                System.out.println(dadosEmp.get(x).toString());
+            //System.out.println(x);
+            System.out.println(dadosEmp.get(x).toString());
             switch(in.nextInt()){
 
                 case 1:
-                    out("Fatura de venda");
+                    menu.clear();
+                    out("\n\t\tCriar fatura de venda");
                     fat = dadosEmp.get(x).criarFatura();
   
                     if(dadosFat.containsKey(x))
@@ -272,10 +308,11 @@ public class Gestao implements java.io.Serializable{
                     listaFaturas.add(fat);
                     dadosFat.put(x,listaFaturas);
                     saveFaturas(dadosFat);
-                    in.nextInt();
+                    inputWait();
                     break;
                 
                 case 2:
+                    menu.clear();
                     out("\nEditar atividade na fatura");
                     listaFaturas = dadosFat.get(x);
                     ArrayList<Fatura> novaListaFats = new ArrayList<Fatura>();
@@ -292,10 +329,11 @@ public class Gestao implements java.io.Serializable{
                     else{
                         dadosEmp.get(x).imprimeFaturas(x,dadosFat.get(x));
                     }
-                    in.nextInt();
+                    inputWait();
                     break;
                     
                 case 4:
+                    menu.clear();
                     out("\nIntroduzir número de contribuinte:");
                     int y = in.nextInt();
                     while(nifValido(y)==false) {
@@ -320,22 +358,21 @@ public class Gestao implements java.io.Serializable{
                         }
                     }
                     out("O NIF "+y+ " gastou "+tot+"€ entre "+inicio+ " e " + fim);
+                    inputWait();
                     break;
                     
                 case 5:
+                    menu.clear();
                     listaFaturas = dadosFat.get(x);
                     totalFaturado(x,listaFaturas);
-                    in.nextInt();
+                    inputWait();
                     break;
                 
                 case 6:
                     menu.clear();
-                    out("\n\tLista das atividades da empresa:\n");
+                    out("\n\t\tLista das atividades da empresa:\n");
                     dadosEmp.get(x).imprimeActivs();
-
-                        
-                    out("\n\n\n\n\n\t\tPrima qualquer numero para voltar atras");
-                    in.nextInt();
+                    inputWait();
                     break;
                     
                 case 0:
@@ -384,11 +421,11 @@ public class Gestao implements java.io.Serializable{
                     index = entry.getKey();
                 }
             }
-            out("NIF: " + index + "gastou "+maxEntry+"€");
+            out("NIF: " + listaNIFS.get(index) + " gastou "+maxEntry.getValue()+"€");
             count++;
             userGasto.remove(index);
-            
         }
+        out("\n\n");
     }
     
     
@@ -423,14 +460,73 @@ public class Gestao implements java.io.Serializable{
             String novaActiv = "";
             novaActiv = emp.select_activ(novaActiv);
             f.setAtividade(novaActiv);
+            f.setDeducao(dadosActiv.get(novaActiv));
             fats.add(f);
             menu.clear();
-            out("Atividade modificada com sucesso");
+            out("***** Atividade modificada com sucesso *****");
             menu.pausar();
         
             return fats;
         }
     }
+    
+    public boolean temPendente(int x, ArrayList<Fatura> fats){
+        for(Fatura f: fats)
+            if(f.getAtividade().equals("Pendente") && f.getNIFCliente()==x)
+                return true;
+        return false;
+    }
+    
+    public ArrayList<Fatura> editar2(int x, Empresa e, ArrayList<Fatura> fats){
+        
+        Fatura f = new Fatura();
+        ArrayList<Fatura> novasFats = new ArrayList<Fatura>(fats.size());
+        for(Fatura fat: fats){
+            novasFats.add(fat);
+        }
+        
+        for(Fatura fat: fats){
+            if(fat.getAtividade().equals("Pendente") && fat.getNIFCliente()==x){
+                f = fat.clone();
+                editActiv(e.getActiv(), f);
+                novasFats.add(f);
+            }
+        }
+        
+        for(Fatura fat: fats){
+            if(fat.getAtividade().equals("Pendente") && fat.getNIFCliente()==x){
+                fat.setValor(0.0);
+                fat.setAtividade("Validada");
+            }
+        }
+        
+        
+        out("***** Atividade modificada com sucesso *****");
+        menu.pausar();
+        
+        return novasFats;
+    }
+    
+    public void editActiv(ArrayList<String> ativs, Fatura f){
+        menu.clear();
+        out("\tNIF Empresa: " +f.getNIFEmitente());
+        out("\tDesignacao Empresa: " +f.getDEmitente());
+        out("\tData: " +f.getData());
+        out("\tNIF Cliente: " +f.getNIFCliente());
+        out("\tDescricao: " +f.getDescricao());
+        out("\n\tQue atividade pretende atribuir?");
+        int i=1;
+        for(String s: ativs){
+            out("\t"+i+": " +s);
+            i++;
+        }
+        int index = in.nextInt();
+        String novAtividade = ativs.get(index-1);
+        double ffiscal = f.getDeducao() + dadosActiv.get(novAtividade);
+        f.setAtividade(novAtividade);
+        f.setDeducao(ffiscal);
+    }
+    
     
     /**
      * Indica qual o NIF da Empresa com mais faturas
@@ -502,9 +598,6 @@ public class Gestao implements java.io.Serializable{
         }
         return fatCliente;
     }
-    
-    
-    
     
     /**
      * Interpreta o menu das atividades e adiciona a um ArrayList as atividades o utilizador considera relevantes a empresa
@@ -642,13 +735,13 @@ public class Gestao implements java.io.Serializable{
                                         nifAgregado.add(y);
                                         depAgreg--;
                                         if(users.containsKey(y))
-                                        coef += 1;
+                                            coef += 1;
                                         else coef += 0.3;
                                     }
                                     else out("NIF inválido");
                                 }
 
-                                Individual indiv = new Individual(a,pw,nom,mail,morada,depAgreg,nifAgregado,coef,1);
+                                Individual indiv = new Individual(a,pw,nom,mail,morada,depAgreg,nifAgregado,coef);
 
                                 dadosInd.put(a,indiv);
                                 saveIndividual(dadosInd);
@@ -672,9 +765,14 @@ public class Gestao implements java.io.Serializable{
                                 ArrayList<String> ativs = new ArrayList<String>();
                                 atividades(ativs);
                                 double deducao = 0.0;
-                                for(String s: ativs){
+                                /*
+                                 * for(String s: ativs){
                                     if(dadosActiv.get(s)>deducao)
                                         deducao = dadosActiv.get(s);
+                                }
+                                */
+                                if(ativs.size()==1){
+                                    deducao = dadosActiv.get(ativs.get(0));
                                 }
                                 
                                 fator += deducao;

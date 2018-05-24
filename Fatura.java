@@ -1,4 +1,3 @@
-import java.util.*;
 import java.time.LocalDate;
 
 public class Fatura implements java.io.Serializable{
@@ -9,6 +8,7 @@ public class Fatura implements java.io.Serializable{
     private String descricao;
     private String atividade;
     private double valor;
+    private double deducao;
     
     public Fatura(){
         this.nifEmitente = 0;
@@ -18,9 +18,10 @@ public class Fatura implements java.io.Serializable{
         this.descricao = "";
         this.atividade = "";
         this.valor = 0.0;
+        this.deducao = 0.0;
     }
     
-    public Fatura(int nif, String designaçao, LocalDate data, int nifCliente, String descricao, String activ, double valor){
+    public Fatura(int nif, String designaçao, LocalDate data, int nifCliente, String descricao, String activ, double valor, double ded){
         this.nifEmitente = nif;
         this.desigEmitente = designaçao;
         this.data = data;
@@ -28,6 +29,7 @@ public class Fatura implements java.io.Serializable{
         this.descricao = descricao;
         this.atividade = activ;
         this.valor = valor;
+        this.deducao = ded;
     }
     
     public Fatura(Fatura f){
@@ -38,6 +40,7 @@ public class Fatura implements java.io.Serializable{
         this.descricao = f.getDescricao();
         this.atividade = f.getAtividade();
         this.valor = f.getValor();
+        this.deducao = f.getDeducao();
     }
     
     public int getNIFEmitente(){ return this.nifEmitente; }
@@ -54,6 +57,8 @@ public class Fatura implements java.io.Serializable{
     
     public double getValor(){ return this.valor; }
     
+    public double getDeducao(){ return this.deducao; }
+    
     public void setNIFEmitente(int novoNIF){ this.nifEmitente = novoNIF; }
     
     public void setDEmitente(String novaDesig){ this.desigEmitente = novaDesig; }
@@ -66,7 +71,9 @@ public class Fatura implements java.io.Serializable{
     
     public void setAtividade(String novaAtiv){ this.atividade = novaAtiv;}
     
-    public void setValor(Double novoValor){ this.valor = novoValor; }
+    public void setValor(double novoValor){ this.valor = novoValor; }
+    
+    public void setDeducao(double novaDeducao) {this.deducao = novaDeducao; }
     
     public boolean equals(Object o){
         if(this == o) 
@@ -80,7 +87,8 @@ public class Fatura implements java.io.Serializable{
                 this.nifCliente == f.getNIFCliente() &&
                 this.descricao.equals(f.getDescricao()) &&
                 this.atividade.equals(f.getAtividade()) &&
-                this.valor == f.getValor();
+                this.valor == f.getValor() &&
+                this.deducao == f.getDeducao();
     }
     
     public String toString(){
@@ -92,6 +100,7 @@ public class Fatura implements java.io.Serializable{
         sb.append("Descricao: " +this.descricao+ "\n");
         sb.append("Atividade: " +this.atividade+ "\n");
         sb.append("Valor: " +this.valor+ "\n");
+        sb.append("Percentagem de deducao: " +(this.deducao*100)+ "% \n");
         
         return sb.toString();
     }

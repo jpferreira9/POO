@@ -2,7 +2,7 @@ import java.util.*;
 import java.time.LocalDate;
 
 public class Menu implements java.io.Serializable{
-    public static void clear() {  
+    public void clear() {  
         System.out.print("\u000C");  
         System.out.flush();  
     }
@@ -23,11 +23,14 @@ public class Menu implements java.io.Serializable{
     
     public void individual(int nif){
         clear();
-        out("\n\t ####### Bem vindo #######\n\n\n\nEscolha a sua opção:");
+        out("\n\t ####### Bem vindo #######\n\n\n\n\tEscolha a sua opção:");
         out("\n\t1) Verificar despesas"); 
         //verificar, por parte do contribuinte individual, as despesas que foram emitidas em seu nome 
         out("\n\t2) Verificar dedução fiscal acumulada");
         // verificar o montante de dedução fiscal acumulado, por si e pelo agregado familiar;
+        out("\n\t3) Editar fatura"); 
+        /* associar/editar classificação de actividade económica a um documento de despesa
+        deve deixar registo para ser depois rastreada */
         out("\n\n\t0) Sair");
     }
     
@@ -151,11 +154,11 @@ public class Menu implements java.io.Serializable{
     
     
     public void fatHeader3() {
-        out("------------------------------------------------------------------------------------");
+        out("------------------------------------------------------------------------------");
         out("      |            |           |");
-        out("  Nº  |  Vendedor  |    NIF    |    Valor deduzido / Valor Total  ");
+        out("  Nº  |  Vendedor  |    NIF    |  Valor deduzivel / Valor Total  ");
         out("      |            |           |");
-        out("------------------------------------------------------------------------------------");
+        out("-------------------------------------------------------------------------------");
     }
     
     public void sair(){
