@@ -98,10 +98,14 @@ public class Gestao implements java.io.Serializable{
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
+                        saveFaturas(dadosFat);
+                        saveEmpresa(dadosEmp);
+                        saveIndividual(dadosInd);
+                        saveUsers(users);
                     }
                     else{
                         menu.clear();
-                        out("\n\n\tNenhuma alterçao efetuada");
+                        out("\n\n\tNenhuma alteração efetuada");
                         menu.pausar();
                     }
                     return;
@@ -113,6 +117,12 @@ public class Gestao implements java.io.Serializable{
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
+                        saveIndividual(dadosInd);
+                    }
+                    else{
+                        menu.clear();
+                        out("\n\n\tNenhuma alteração efetuada");
+                        menu.pausar();
                     }
                     return;
                     
@@ -123,6 +133,12 @@ public class Gestao implements java.io.Serializable{
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
+                        saveEmpresa(dadosEmp);
+                    }
+                    else{
+                        menu.clear();
+                        out("\n\n\tNenhuma alteração efetuada");
+                        menu.pausar();
                     }
                     return;
                     
@@ -132,6 +148,12 @@ public class Gestao implements java.io.Serializable{
                         resetFaturas();
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
+                        menu.pausar();
+                        saveFaturas(dadosFat);
+                    }
+                    else{
+                        menu.clear();
+                        out("\n\n\tNenhuma alteração efetuada");
                         menu.pausar();
                     }
                     return;
@@ -145,6 +167,156 @@ public class Gestao implements java.io.Serializable{
             }
         }
     }
+    public void logOut() {
+    	while(true){
+            menu.login();
+            switch(in.nextInt()){
+                case 1: // Login de utilizador 
+                    out("\nIntroduza NIF: ");
+                    int a = in.nextInt();
+                    if(nifValido(a)==true){
+                        if(users.containsKey(a) == true){
+                            out("\nIntroduza password: ");
+                            String pw = in.next();
+                            if(users.get(a).equals(pw)){
+                                if(a == 1234){
+                                    admin();
+                                    //menu.sair();
+                                    return;
+                                }
+                                else if(a < 300000000){
+                                    individual(a);
+                                    //menu.sair();
+                                    return;
+                                }
+                                else if(a > 300000000){
+                                    empresa(a);
+                                    //menu.sair();
+                                    return;
+                                }
+                            }
+                            else {
+                                out("\nPassword incorrecta!");
+                                break;
+                            }
+                        }
+                        else {
+                            out("\nNIF não existe!");
+                            break;
+                        }
+                    }
+                    else {
+                        out("\nNIF inválido!");
+                        break;
+                    }
+                case 2: // Registar Utilizador
+                    out("\nIntroduza NIF: ");
+                    a = in.nextInt();
+                    if(nifValido(a)==true){
+                        boolean tipoI;
+                        if(a<300000000)tipoI = true;
+                        else tipoI = false;
+                        boolean check = users.containsKey(a);
+                        if(check == false) {
+                            out("\nIntroduza password:");
+                            String pw = in.next();
+                            users.put(a,pw);
+                            if(tipoI){ // DEFINIDO COMO INDIVIDUAL
+                                out("\nIntroduza o seu nome");
+                                String nom = in.nextLine();
+                                nom = in.nextLine();
+                                out("\nIntroduza o seu e-mail");
+                                String mail = in.nextLine();
+                                out("\nIntroduza a sua morada");
+                                String morada = in.nextLine();
+                                out("\nIntroduza o numero de dependentes do agregado familiar");
+                                int depAgreg = in.nextInt();
+                                out("Introduza os NIFs do agregado familiar");
+
+                                ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
+                                double coef = 1;
+                                int nrAgreg = depAgreg;
+                                while(depAgreg > 0){
+                                    int y = in.nextInt();
+                                    if(nifValido(y)==true){
+                                        nifAgregado.add(y);
+                                        depAgreg--;
+                                        if(users.containsKey(y))
+                                            coef += 1;
+                                        else coef += 0.3;
+                                    }
+                                    else out("NIF inválido");
+                                }
+
+                                Individual indiv = new Individual(a,pw,nom,mail,morada,nrAgreg,nifAgregado,coef);
+
+                                dadosInd.put(a,indiv);
+                                saveIndividual(dadosInd);
+
+                            }
+                            else { // DEFINIDO COMO EMPRESA
+                                out("\nIntroduza o nome da empresa");
+                                String nome = in.nextLine();
+                                nome = in.nextLine();
+                                out("\nIntroduza o seu-mail");
+                                String mail = in.nextLine();
+                                out("\nIntroduza o seu distrito");
+                                String distrito = in.nextLine();
+                                while(!dadosDistr.containsKey(distrito)){
+                                    out("Introduza um distrito valido, atencao as maiusculas");
+                                    distrito = in.nextLine();
+                                }
+                                
+                                double fator = dadosDistr.get(distrito);
+                                
+                                ArrayList<String> ativs = new ArrayList<String>();
+                                atividades(ativs);
+                                double deducao = 0.0;
+                                /*
+                                 * for(String s: ativs){
+                                    if(dadosActiv.get(s)>deducao)
+                                        deducao = dadosActiv.get(s);
+                                }
+                                */
+                                if(ativs.size()==1){
+                                    deducao = dadosActiv.get(ativs.get(0));
+                                }
+                                
+                                fator += deducao;
+                                out(fator);   
+                                emp = new Empresa(a,pw, nome, mail, distrito, ativs ,fator);
+
+                                dadosEmp.put(a,emp);
+                                saveEmpresa(dadosEmp);
+                            }
+                            out("\n\t\t***Registo efetuado***\n\n");
+                            saveUsers(users);
+                            break;
+                        }
+                        else{
+                            out("\nNIF já existe!");    
+                            break;
+                        }
+                    }
+                    else {
+                        out("\nNIF inválido!");
+                        break;
+                    }
+                case 3:
+                    menu.sair();
+                    return;
+                    
+                default:
+                    out("\nOpção inválida!");
+                    break;
+                }
+            out("\nPrima qualquer nº para continuar, 0 para sair:");
+            if(in.nextInt() == 0) return;
+        }
+            
+    }
+    
+    
     
     /**
      * Interpreta o menu do administrador
@@ -232,6 +404,7 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                case 0:
+            	   logOut();
                     return;
                     
                default:
@@ -272,13 +445,14 @@ public class Gestao implements java.io.Serializable{
                     out("\n\t\tDeducao fiscal acumulada:");
                     
                     fatCliente = listagemDespesas(x);
+                    double deduzivel = 0;
                     double total = 0;
-                    for(Fatura f: fatCliente)
+                    for(Fatura f: fatCliente) {
                         total += f.getValor();
-                    
+                    	deduzivel += f.getValor()*f.getDeducao();
+                	}
                     double coeficiente = dadosInd.get(x).getCoef();
                     double deduzivelMax = 500*coeficiente;
-                    double deduzivel = total*coeficiente;
                     if(deduzivel>deduzivelMax){
                         deduzivel = deduzivelMax;
                     }
@@ -311,6 +485,7 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                 case 0:
+                	logOut();
                     return;
                     
                 default:
@@ -430,6 +605,7 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                 case 0:
+                	logOut();
                     return;
                     
                 default:
@@ -650,6 +826,7 @@ public class Gestao implements java.io.Serializable{
             }
         }
         System.out.println("Total faturado pela empresa no intervalo: "+ total + "€");
+        inputWait();
     }
     
     /**
@@ -733,152 +910,7 @@ public class Gestao implements java.io.Serializable{
         loadIndividual();
         loadEmpresa();
         loadFaturas();
-        while(true){
-            menu.login();
-            switch(in.nextInt()){
-                case 1: // Login de utilizador 
-                    out("\nIntroduza NIF: ");
-                    int a = in.nextInt();
-                    if(nifValido(a)==true){
-                        if(users.containsKey(a) == true){
-                            out("\nIntroduza password: ");
-                            String pw = in.next();
-                            if(users.get(a).equals(pw)){
-                                if(a == 1234){
-                                    admin();
-                                    menu.sair();
-                                    return;
-                                }
-                                else if(a < 300000000){
-                                    individual(a);
-                                    menu.sair();
-                                    return;
-                                }
-                                else if(a > 300000000){
-                                    empresa(a);
-                                    menu.sair();
-                                    return;
-                                }
-                            }
-                            else {
-                                out("\nPassword incorrecta!");
-                                break;
-                            }
-                        }
-                        else {
-                            out("\nNIF não existe!");
-                            break;
-                        }
-                    }
-                    else {
-                        out("\nNIF inválido!");
-                        break;
-                    }
-                case 2: // Registar Utilizador
-                    out("\nIntroduza NIF: ");
-                    a = in.nextInt();
-                    if(nifValido(a)==true){
-                        boolean tipoI;
-                        if(a<300000000)tipoI = true;
-                        else tipoI = false;
-                        boolean check = users.containsKey(a);
-                        if(check == false) {
-                            out("\nIntroduza password:");
-                            String pw = in.next();
-                            users.put(a,pw);
-                            if(tipoI){ // DEFINIDO COMO INDIVIDUAL
-                                out("\nIntroduza o seu nome");
-                                String nom = in.nextLine();
-                                nom = in.nextLine();
-                                out("\nIntroduza o seu e-mail");
-                                String mail = in.nextLine();
-                                out("\nIntroduza a sua morada");
-                                String morada = in.nextLine();
-                                out("\nIntroduza o numero de dependentes do agregado familiar");
-                                int depAgreg = in.nextInt();
-                                out("Introduza os NIFs do agregado familiar");
-
-                                ArrayList<Integer> nifAgregado = new ArrayList<Integer>();
-                                double coef = 1;
-                                int nrAgreg = depAgreg;
-                                while(depAgreg > 0){
-                                    int y = in.nextInt();
-                                    if(nifValido(y)==true){
-                                        nifAgregado.add(y);
-                                        depAgreg--;
-                                        if(users.containsKey(y))
-                                            coef += 1;
-                                        else coef += 0.3;
-                                    }
-                                    else out("NIF inválido");
-                                }
-
-                                Individual indiv = new Individual(a,pw,nom,mail,morada,nrAgreg,nifAgregado,coef);
-
-                                dadosInd.put(a,indiv);
-                                saveIndividual(dadosInd);
-
-                            }
-                            else { // DEFINIDO COMO EMPRESA
-                                out("\nIntroduza o nome da empresa");
-                                String nome = in.nextLine();
-                                nome = in.nextLine();
-                                out("\nIntroduza o seu-mail");
-                                String mail = in.nextLine();
-                                out("\nIntroduza o seu distrito");
-                                String distrito = in.nextLine();
-                                while(!dadosDistr.containsKey(distrito)){
-                                    out("Introduza um distrito valido, atencao as maiusculas");
-                                    distrito = in.nextLine();
-                                }
-                                
-                                double fator = dadosDistr.get(distrito);
-                                
-                                ArrayList<String> ativs = new ArrayList<String>();
-                                atividades(ativs);
-                                double deducao = 0.0;
-                                /*
-                                 * for(String s: ativs){
-                                    if(dadosActiv.get(s)>deducao)
-                                        deducao = dadosActiv.get(s);
-                                }
-                                */
-                                if(ativs.size()==1){
-                                    deducao = dadosActiv.get(ativs.get(0));
-                                }
-                                
-                                fator += deducao;
-                                out(fator);   
-                                emp = new Empresa(a,pw, nome, mail, distrito, ativs ,fator);
-
-                                dadosEmp.put(a,emp);
-                                saveEmpresa(dadosEmp);
-                            }
-                            out("\n\t\t***Registo efetuado***\n\n");
-                            saveUsers(users);
-                            break;
-                        }
-                        else{
-                            out("\nNIF já existe!");    
-                            break;
-                        }
-                    }
-                    else {
-                        out("\nNIF inválido!");
-                        break;
-                    }
-                case 3:
-                    menu.sair();
-                    return;
-                    
-                default:
-                    out("\nOpção inválida!");
-                    break;
-                }
-            out("\nPrima qualquer nº para continuar, 0 para sair:");
-            if(in.nextInt() == 0) return;
-        }
-            
+        logOut();
     }
     
     /**
