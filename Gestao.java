@@ -284,9 +284,9 @@ public class Gestao implements java.io.Serializable{
                     }
                     
                     out("\n\t O seu coeficiente fiscal: "+coeficiente);
-                    out("\n\t Valor maximo deduzivel para o individual: " +deduzivelMax);
-                    out("\n\tValor total faturado: " +total);
-                    out("\n\tValor total deduzivel: " +deduzivel);
+                    out("\n\t Valor maximo deduzivel para o individual: " +deduzivelMax+"€");
+                    out("\n\tValor total faturado: " +total+ "€");
+                    out("\n\tValor total deduzivel: " +deduzivel+ "€");
                     inputWait();
                     break;
                 
@@ -439,6 +439,9 @@ public class Gestao implements java.io.Serializable{
         }
     }
     
+    /**
+     * Imprime ate 10 individuais de acordo com o valor gasto na totalidade
+     */
     public void maisDespesas() {
         out("\n10 contribuintes com mais despesas:");
         ArrayList<Fatura> allR = new ArrayList<Fatura>();
@@ -457,16 +460,19 @@ public class Gestao implements java.io.Serializable{
         }
         // povoamento do mapa com nifs e valores a 0
         for(int i=0;i<listaNIFS.size();i++) {
-            userGasto.put(i,0.0);
+            int nif = listaNIFS.get(i);
+            userGasto.put(nif,0.0);
         }
-        // percorre a lista de nifs e adiciona o valor respetivo da lista de gastos ao mapa no nif respetivo
+        // povoamento do mapa com nifs e respetivo total gasto
         for(int i=0;i<listaNIFS.size();i++) {
+            int nif = listaNIFS.get(i);
             double tempVal = listaGASTO.get(i);
-            double valFinal = tempVal + userGasto.get(i);
-            userGasto.put(i,valFinal);
+            double valFinal = tempVal + userGasto.get(nif);
+            userGasto.put(nif,valFinal);
         }
+        // percorre o mapa userGasto e imprime consecutivamente users com maior despesa total 
         int count = 0;
-        while(!userGasto.isEmpty() && count<9) {
+        while(!userGasto.isEmpty() && count<= 9 && userGasto.size()>0) {
             Map.Entry<Integer, Double> maxEntry = null;
             int index = 0;
             for(Map.Entry<Integer,Double> entry : userGasto.entrySet()) {
@@ -475,7 +481,7 @@ public class Gestao implements java.io.Serializable{
                     index = entry.getKey();
                 }
             }
-            out("NIF: " + listaNIFS.get(index) + " gastou "+maxEntry.getValue()+"€");
+            out("NIF: " + index + " gastou "+maxEntry.getValue()+"€");
             count++;
             userGasto.remove(index);
         }
@@ -861,6 +867,10 @@ public class Gestao implements java.io.Serializable{
                         out("\nNIF inválido!");
                         break;
                     }
+                case 3:
+                    menu.sair();
+                    return;
+                    
                 default:
                     out("\nOpção inválida!");
                     break;
