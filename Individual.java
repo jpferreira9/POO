@@ -22,7 +22,7 @@ public class Individual implements java.io.Serializable{
         this.coef = 0;
     }
     
-    public Individual (int nif, String password, String email, String nome, String morada ,int agreg , ArrayList<Integer> na, double coef){
+    public Individual (int nif, String password, String nome, String email, String morada ,int agreg , ArrayList<Integer> na, double coef){
         this.nif = nif;
         this.password = password;
         this.nome = nome;

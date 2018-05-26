@@ -32,7 +32,7 @@ public class Menu implements java.io.Serializable{
         out("\n\t4) Validar fatura(s)"); 
         /* associar/editar classificação de actividade económica a um documento de despesa
         deve deixar registo para ser depois rastreada */
-        out("\n\n\t0) Sair");
+        out("\n\n\t0) LogOut");
     }
     
     public void menu_ativs(){
@@ -59,18 +59,15 @@ public class Menu implements java.io.Serializable{
         out("\n\t1) Ver os seus dados");
         out("\n\t2) Criar fatura"); 
         //criar facturas associadas a despesas feitas por um contribuinte individual
-        out("\n\t3) Editar fatura"); 
-        /* associar/editar classificação de actividade económica a um documento de despesa
-        deve deixar registo para ser depois rastreada */
-        out("\n\t4) Verificar faturas emitidas"); 
+        out("\n\t3) Verificar faturas emitidas"); 
         //obter a listagem das facturas todas de uma determinada empresa, ordenada por data de emissão ou por valor
-        out("\n\t5) Verificar faturas de contribuinte"); 
+        out("\n\t4) Verificar faturas de contribuinte num determinado periodo"); 
         /* obter por parte das empresas, as listagens das facturas por contribuinte num determinado intervalo de datas
          obter por parte das empresas, as listagens das facturas por contribuinte ordenadas por valor decrescente de despesa */
-        out("\n\t6) Verificar total faturado"); 
+        out("\n\t5) Verificar total faturado num determinado periodo"); 
         // indicar o total facturado por uma empresa num determinado período
-        out("\n\t7) Ver lista das atividades da empresa");
-        out("\n\n\t0) Sair");
+        out("\n\t6) Ver lista das atividades da empresa");
+        out("\n\n\t0) LogOut");
     }
     
     public void admin(){
@@ -88,7 +85,7 @@ public class Menu implements java.io.Serializable{
         out("\n\t5) Ver individuais registados");
         out("\n\t6) Ver faturas registados");
         out("\n\t7) Limpar dados");
-        out("\n\n\t0) Sair");
+        out("\n\n\t0) LogOut");
     }
     
     public void limpaDados(){
@@ -167,7 +164,7 @@ public class Menu implements java.io.Serializable{
     
     public void sair(){
         clear();
-        out("\n\n\tObrigado pela dadiva ao estado.");
+        out("\n\n\tObrigado pela sua preferencia.");
     }
     
 }

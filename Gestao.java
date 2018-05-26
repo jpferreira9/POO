@@ -77,8 +77,12 @@ public class Gestao implements java.io.Serializable{
      * Aguarda input do utilizador
      */
     public void inputWait() {
-        out("\n\n\t\tPressione qualquer tecla para continuar");
-        in.next();
+        out("\n\n\t\tPrima 'Enter' para continuar");
+        try{
+            System.in.read();
+        }
+        catch(Exception e){
+        }
     }
     
     /**
@@ -98,14 +102,10 @@ public class Gestao implements java.io.Serializable{
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
-                        saveFaturas(dadosFat);
-                        saveEmpresa(dadosEmp);
-                        saveIndividual(dadosInd);
-                        saveUsers(users);
                     }
                     else{
                         menu.clear();
-                        out("\n\n\tNenhuma alteração efetuada");
+                        out("\n\n\tNenhuma alterçao efetuada");
                         menu.pausar();
                     }
                     return;
@@ -117,12 +117,6 @@ public class Gestao implements java.io.Serializable{
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
-                        saveIndividual(dadosInd);
-                    }
-                    else{
-                        menu.clear();
-                        out("\n\n\tNenhuma alteração efetuada");
-                        menu.pausar();
                     }
                     return;
                     
@@ -133,12 +127,6 @@ public class Gestao implements java.io.Serializable{
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
                         menu.pausar();
-                        saveEmpresa(dadosEmp);
-                    }
-                    else{
-                        menu.clear();
-                        out("\n\n\tNenhuma alteração efetuada");
-                        menu.pausar();
                     }
                     return;
                     
@@ -148,12 +136,6 @@ public class Gestao implements java.io.Serializable{
                         resetFaturas();
                         menu.clear();
                         out("\n\n\n\t\t\t********** Dados eliminados! **********");
-                        menu.pausar();
-                        saveFaturas(dadosFat);
-                    }
-                    else{
-                        menu.clear();
-                        out("\n\n\tNenhuma alteração efetuada");
                         menu.pausar();
                     }
                     return;
@@ -167,8 +149,9 @@ public class Gestao implements java.io.Serializable{
             }
         }
     }
-    public void logOut() {
-    	while(true){
+    
+    public void inicio(){
+        while(true){
             menu.login();
             switch(in.nextInt()){
                 case 1: // Login de utilizador 
@@ -181,17 +164,14 @@ public class Gestao implements java.io.Serializable{
                             if(users.get(a).equals(pw)){
                                 if(a == 1234){
                                     admin();
-                                    //menu.sair();
                                     return;
                                 }
                                 else if(a < 300000000){
                                     individual(a);
-                                    //menu.sair();
                                     return;
                                 }
                                 else if(a > 300000000){
                                     empresa(a);
-                                    //menu.sair();
                                     return;
                                 }
                             }
@@ -223,8 +203,8 @@ public class Gestao implements java.io.Serializable{
                             users.put(a,pw);
                             if(tipoI){ // DEFINIDO COMO INDIVIDUAL
                                 out("\nIntroduza o seu nome");
-                                String nom = in.nextLine();
-                                nom = in.nextLine();
+                                String nome = in.nextLine();
+                                nome = in.nextLine();
                                 out("\nIntroduza o seu e-mail");
                                 String mail = in.nextLine();
                                 out("\nIntroduza a sua morada");
@@ -248,7 +228,7 @@ public class Gestao implements java.io.Serializable{
                                     else out("NIF inválido");
                                 }
 
-                                Individual indiv = new Individual(a,pw,nom,mail,morada,nrAgreg,nifAgregado,coef);
+                                Individual indiv = new Individual(a,pw,nome,mail,morada,nrAgreg,nifAgregado,coef);
 
                                 dadosInd.put(a,indiv);
                                 saveIndividual(dadosInd);
@@ -313,9 +293,7 @@ public class Gestao implements java.io.Serializable{
             out("\nPrima qualquer nº para continuar, 0 para sair:");
             if(in.nextInt() == 0) return;
         }
-            
     }
-    
     
     
     /**
@@ -402,9 +380,9 @@ public class Gestao implements java.io.Serializable{
                case 7:
                     limparDados();
                     break;
-                    
+               
                case 0:
-            	   logOut();
+                    inicio();
                     return;
                     
                default:
@@ -445,22 +423,24 @@ public class Gestao implements java.io.Serializable{
                     out("\n\t\tDeducao fiscal acumulada:");
                     
                     fatCliente = listagemDespesas(x);
-                    double deduzivel = 0;
                     double total = 0;
-                    for(Fatura f: fatCliente) {
+                    double deduzivel = 0;
+                    for(Fatura f: fatCliente){
                         total += f.getValor();
-                    	deduzivel += f.getValor()*f.getDeducao();
-                	}
+                        deduzivel += f.getValor()*f.getDeducao();
+                    }
+                    
                     double coeficiente = dadosInd.get(x).getCoef();
                     double deduzivelMax = 500*coeficiente;
+                    
                     if(deduzivel>deduzivelMax){
                         deduzivel = deduzivelMax;
                     }
                     
                     out("\n\t O seu coeficiente fiscal: "+coeficiente);
                     out("\n\t Valor maximo deduzivel para o individual: " +deduzivelMax+"€");
-                    out("\n\tValor total faturado: " +total+ "€");
-                    out("\n\tValor total deduzivel: " +deduzivel+ "€");
+                    out("\n\t Valor total faturado: " +total+ "€");
+                    out("\n\t Valor total deduzivel: " +deduzivel+ "€");
                     inputWait();
                     break;
                 
@@ -485,7 +465,7 @@ public class Gestao implements java.io.Serializable{
                     break;
                     
                 case 0:
-                	logOut();
+                    inicio();
                     return;
                     
                 default:
@@ -523,24 +503,8 @@ public class Gestao implements java.io.Serializable{
                     saveFaturas(dadosFat);
                     inputWait();
                     break;
-                
+    
                 case 3:
-                    menu.clear();
-                    out("\n\t\tEditar atividade na fatura");
-                    listaFaturas = dadosFat.get(x);
-                    if(listaFaturas == null){
-                        out("\n\t ***** Nao existem faturas registadas nesta Empresa *****");
-                        inputWait();
-                    }
-                    else{
-                    ArrayList<Fatura> novaListaFats = new ArrayList<Fatura>();
-                    novaListaFats = editar(listaFaturas);
-                    dadosFat.replace(x,novaListaFats);
-                    saveFaturas(dadosFat);
-                    }
-                    break;
-                    
-                case 4:
                     menu.clear();
                     out("\n\tLista de faturas:");
                     if(dadosFat.get(x) == null)
@@ -551,10 +515,12 @@ public class Gestao implements java.io.Serializable{
                     inputWait();
                     break;
                     
-                case 5:
+                case 4:
                     menu.clear();
-                    if(listaFaturas == null){
+                    
+                    if(listaFaturas == null || dadosFat.get(x) == null){
                         out("\n\t ***** Nao existem faturas registadas nesta Empresa *****");
+                        inputWait();
                     }
                     else{
                     out("\nIntroduzir número de contribuinte:");
@@ -581,12 +547,12 @@ public class Gestao implements java.io.Serializable{
                         }
                     }
                     out("O NIF "+y+ " gastou "+tot+"€ entre "+inicio+ " e " + fim);
-                    
-                    }
                     inputWait();
+                    }
+                    
                     break;
                     
-                case 6:
+                case 5:
                     menu.clear();
                     listaFaturas = dadosFat.get(x);
                     if(listaFaturas != null)
@@ -597,15 +563,32 @@ public class Gestao implements java.io.Serializable{
                     }
                     break;
                 
-                case 7:
+                case 6:
                     menu.clear();
                     out("\n\t\tLista das atividades da empresa:\n");
                     dadosEmp.get(x).imprimeActivs();
                     inputWait();
                     break;
+                /*
+                case 3:
+                    menu.clear();
+                    out("\n\t\tEditar atividade na fatura");
+                    listaFaturas = dadosFat.get(x);
+                    if(listaFaturas == null){
+                        out("\n\t ***** Nao existem faturas registadas nesta Empresa *****");
+                        inputWait();
+                    }
+                    else{
+                    ArrayList<Fatura> novaListaFats = new ArrayList<Fatura>();
+                    novaListaFats = editar(listaFaturas);
+                    dadosFat.replace(x,novaListaFats);
+                    saveFaturas(dadosFat);
+                    }
+                    break;
+                */
                     
                 case 0:
-                	logOut();
+                    inicio();
                     return;
                     
                 default:
@@ -905,12 +888,19 @@ public class Gestao implements java.io.Serializable{
      * Login e Registo de Entidades
      */
     public Gestao(){
-        users.put(1234,"bolas");
+        dados.povUsers(users);
+        dados.povEmpresa(dadosEmp);
+        dados.povIndividuais(dadosInd);
+        dados.povFat(dadosFat);
+        saveUsers(users);
+        saveIndividual(dadosInd);
+        saveEmpresa(dadosEmp);
+        saveFaturas(dadosFat);
         loadUsers();
         loadIndividual();
         loadEmpresa();
         loadFaturas();
-        logOut();
+        inicio();
     }
     
     /**
@@ -1109,8 +1099,8 @@ public class Gestao implements java.io.Serializable{
      */
     public void mapPrint(HashMap<Integer,String> map){
         for(Map.Entry<Integer,String> u : map.entrySet()){
-                out(" Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
-            }
+            out(" Username: {"+u.getKey()+"} Password: {"+u.getValue()+"}\n");
+        }
     }
 
     
