@@ -13,7 +13,7 @@ public class Menu implements java.io.Serializable{
     
     public void login(){
         clear();
-        out("\n\t ####### Bem vindo #######\n\n\n\nEscolha a sua opção: ");
+        out("\n\t ####### Bem vindo ao JavaFatura #######\n\n\n\n\tEscolha a sua opção: ");
         out("\n\t1) Fazer login"); 
         //FEITO validar o acesso à aplicação utilizando as credenciais (nif e password)
         out("\n\t2) Registar um novo utilizador"); 
@@ -37,7 +37,7 @@ public class Menu implements java.io.Serializable{
     
     public void menu_ativs(){
         clear();
-        out("####### Selecione a atividade: #######");
+        out("####### Selecione a(s) atividade(s): #######");
         out("\n\t1) Cabeleireiros");
         out("\t2) Despesas Familiares");
         out("\t3) Educação");
@@ -50,7 +50,7 @@ public class Menu implements java.io.Serializable{
         out("\t10) Saúde");
         out("\t11) Veterinários");
         out("\t12) Outros");
-        out("\n\t0) Sair");
+        out("\n\t0) Concluir");
     }
     
     public void empresa(int nif){
@@ -85,6 +85,7 @@ public class Menu implements java.io.Serializable{
         out("\n\t5) Ver individuais registados");
         out("\n\t6) Ver faturas registados");
         out("\n\t7) Limpar dados");
+        out("\n\t8) Carregar dados");
         out("\n\n\t0) LogOut");
     }
     

@@ -154,7 +154,6 @@ public class Empresa implements java.io.Serializable{
         out("\n\t Breve descriçao da despesa: "+descricao);
         out("\n\t Natureza da despesa: ");
         String act = "Pendente";
-        //act = select_activ(act);
         if(this.getActiv().size()==1){
             act = this.getActiv().get(0);
         }
@@ -180,7 +179,6 @@ public class Empresa implements java.io.Serializable{
         
         Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, act, valor, this.getFFiscal());        
         
-        System.out.println(fat.toString());
         return fat;
     }
         
