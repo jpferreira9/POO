@@ -150,10 +150,6 @@ public class JavaFatura implements java.io.Serializable{
         }
     }
     
-    /**
-     * Cria e gere o menu inicial, onde permite a um utilizador registar-se no programa
-     * ou fazer login caso ja tenha guardado as credenciais
-     */
     public void inicio(){
         while(true){
             menu.login();
@@ -704,12 +700,6 @@ public class JavaFatura implements java.io.Serializable{
         }
     }
     
-    /**
-     * Verifica se na lista de faturas o NIF dado tem faturas marcadas como pendentes
-     * @param x NIF do utilizador
-     * @param fats lista de faturas do utilizador
-     * @return true se existirem faturas pendentes, false caso contrario
-     */
     public boolean temPendente(int x, ArrayList<Fatura> fats){
         for(Fatura f: fats)
             if(f.getAtividade().equals("Pendente") && f.getNIFCliente()==x)
@@ -717,14 +707,6 @@ public class JavaFatura implements java.io.Serializable{
         return false;
     }
     
-    /**
-     * Guarda o registo da fatura pendente para validada (com o valor a 0 por motivos de calculo)
-     * e adiciona a mesma fatura, com a atividade respetiva, a lista das faturas da empresa
-     * @param x nif do cliente
-     * @param e empresa a que pertence a fatura
-     * @param fats lista de faturas da empresa
-     * @return lista das faturas com a fatura validada e a nova fatura acrescentada
-     */
     public ArrayList<Fatura> editar2(int x, Empresa e, ArrayList<Fatura> fats){
         
         Fatura f = new Fatura();
@@ -755,11 +737,6 @@ public class JavaFatura implements java.io.Serializable{
         return novasFats;
     }
     
-    /**
-     * Edita a atividade registada numa fatura
-     * @param ativs lista de atividades da empresa
-     * @param f fatura em que se altera a atividade
-     */
     public void editActiv(ArrayList<String> ativs, Fatura f){
         menu.clear();
         out("\tNIF Empresa: " +f.getNIFEmitente());
@@ -867,6 +844,7 @@ public class JavaFatura implements java.io.Serializable{
      * @param ativs ArrayList que contem Strings de atividades
      */
     public void atividades(ArrayList<String> ativs){
+        out("####### Selecione a(s) atividade(s): #######");
         menu.menu_ativs();
         while(true){
             switch(in.nextInt()){

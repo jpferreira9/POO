@@ -1,11 +1,17 @@
 
-public class Entidade{
+/**
+ * Write a description of class Entidade here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+public class Entidade implements java.io.Serializable{
     private int nif;
+    private String password;
     private String email;
     private String nome;
     private String morada;
-    private String password;
-
+    
     public Entidade(){
         this.nif = 0;
         this.password = "";
@@ -14,9 +20,9 @@ public class Entidade{
         this.morada = "";
     }
     
-    public Entidade (int nif, String pass, String nome, String email, String morada){
+    public Entidade(int nif, String password, String nome, String email, String morada){
         this.nif = nif;
-        this.password = pass;
+        this.password = password;
         this.nome = nome;
         this.email = email;
         this.morada = morada;
@@ -29,7 +35,7 @@ public class Entidade{
         this.email = e.getEmail();
         this.morada = e.getMorada();
     }
-
+    
     public int getNif(){ return this.nif; }
     
     public String getPassword(){ return this.password; }
@@ -51,18 +57,13 @@ public class Entidade{
     public void setPassword (String novaPass){ this.password = novaPass; }
     
     public boolean equals (Object o){
-        if(this == o)
-            return true;
-        if ( o == null || this.getClass() != o.getClass() )
-            return false;
-        
+        if(this==o) return true;
+        if((o==null) || this.getClass() != o.getClass()) return false;
         Entidade e = (Entidade) o;
-        
         return this.nif == e.getNif() &&
-               this.email.equals(e.getEmail()) &&
-               this.nome.equals(e.getNome()) &&
-               this.morada.equals(e.getMorada()) &&
-               this.password.equals(e.getPassword());      
+                this.email.equals(e.getEmail()) &&
+                this.nome.equals(e.getNome()) &&
+                this.morada.equals(e.getMorada());
     }
     
     public String toString(){
@@ -73,11 +74,11 @@ public class Entidade{
         sb.append("Nome: "+this.nome+ "\n");
         sb.append("Morada: " +this.morada+ "\n");
         sb.append("Email: " +this.email+ "\n");
-        
         return sb.toString();
     }
     
     public Entidade clone(){
         return new Entidade(this);
     }
+    
 }

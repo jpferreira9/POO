@@ -5,10 +5,6 @@ import java.time.Month;
 
 public class Dados{
     
-    /** 
-     * Povoa o mapa distritos com nome de distritos e respetiva taxa de deducao
-     * @return mapa distritos povoado
-     */
     public HashMap<String, Double> povDistritos(){
         HashMap<String,Double> distritos = new HashMap<String,Double>();
         distritos.put("Viana do Castelo", 0.17);
@@ -33,11 +29,7 @@ public class Dados{
         distritos.put("Açores", 0.136);
         return distritos;
     }
-    
-    /**
-     * Povoa o mapa atividades com nome de atividades e respetiva taxa de deducao
-     * @return mapa atividades povoado
-     */
+       
     public HashMap<String, Double> povAtividades(){
         HashMap<String,Double> atividades = new HashMap<String,Double>();
         atividades.put("Cabeleireiros", 0.25);
@@ -56,10 +48,6 @@ public class Dados{
         return atividades;
     }
     
-    /**
-     * Povoa o mapa empresas com alguns exemplos de empresas
-     * @param empP mapa de empresas a povoar
-     */
     public void povEmpresa(HashMap<Integer,Empresa> empP){
         ArrayList<String> a1 = new ArrayList<String>();
         a1.add("Saúde");
@@ -114,10 +102,6 @@ public class Dados{
         empP.put(555555551, e11);
     }
     
-    /**
-     * Povoa o mapa individuais com alguns exemplos de individuais
-     * @param indP mapa de individuais a povoar
-     */
     public void povIndividuais(HashMap<Integer,Individual> indP){
 
         ArrayList<Integer> na1 = new ArrayList<Integer>();
@@ -193,10 +177,8 @@ public class Dados{
         indP.put(222222224,i15);
     }
     
-    /**
-     * Povoa o mapa users com alguns exemplos de utilizadores
-     * @param indP mapa de users a povoar
-     */
+    
+    
     public void povUsers(HashMap<Integer,String> usersP){
         usersP.put(510685390, "prelada");
         usersP.put(555555552, "lucia");
@@ -225,48 +207,44 @@ public class Dados{
         usersP.put(222222223,"nunopass");
     }
     
-    /**
-     * Povoa o mapa faturas com alguns exemplos de faturas
-     * @param fat mapa de faturas a povoar
-     */
     public void povFat(HashMap<Integer,ArrayList<Fatura>> fat) {
-        Fatura f1 = new Fatura(510685390,"Farmácia da Prelada, Lda",LocalDate.of(2018,Month.JANUARY,10),111111119,"Floxapen 15mg","Saúde",12.37,0.27);
-        Fatura f2 = new Fatura(555555552,"Cabeleireiros Lucia",LocalDate.of(2018,Month.JANUARY,11),111111113,"Pacote 23","Cabeleireiros",15.50,0.42);
-        Fatura f3 = new Fatura(555555551,"Animal Care",LocalDate.of(2018,Month.FEBRUARY, 15),111111114,"Vacina Raiva","Veterinários",45.0,0.27);
-        Fatura f4 = new Fatura(555555554,"Pingo Doce",LocalDate.of(2018,Month.FEBRUARY, 23),111111114,"Papel Higiénico","Pendente",3.99,0.125);
-        Fatura f5 = new Fatura(555555550,"Remax",LocalDate.of(2018, Month.MARCH, 15),111111119,"Casa Rio Tinto","Habitação",20000.0,0.41);
-        Fatura f6 = new Fatura(555555555,"Comboios de Portugal",LocalDate.of(2018, Month.MARCH, 23),222222220,"Passe Mensal A2","Passes Mensais",25.0,0.33);
-        Fatura f7 = new Fatura(555555556,"Vila Gale",LocalDate.of(2018, Month.APRIL, 16),111111116,"Estadia 2 Noites","Restauração e Alojamento",100.0,0.42);
-        Fatura f8 = new Fatura(555555557,"Universidade do Minho",LocalDate.of(2018, Month.MAY, 5),111111117,"Propinas Abril 2018","Validada",0.0,0.17);
-        Fatura f9 = new Fatura(555555557,"Universidade do Minho",LocalDate.of(2018, Month.MAY, 5),111111117,"Propinas Abril 2018","Educação",171.30,0.30);
-                
-        ArrayList<Fatura> arr1 = new ArrayList<>();
-        arr1.add(f1);
-        ArrayList<Fatura> arr2 = new ArrayList<>();
-        arr2.add(f2);
-        ArrayList<Fatura> arr3 = new ArrayList<>();
-        arr3.add(f3);
-        ArrayList<Fatura> arr4 = new ArrayList<>();
-        arr4.add(f4);
-        ArrayList<Fatura> arr5 = new ArrayList<>();
-        arr5.add(f5);
-        ArrayList<Fatura> arr6 = new ArrayList<>();
-        arr6.add(f6);
-        ArrayList<Fatura> arr7 = new ArrayList<>();
-        arr7.add(f7);
-        ArrayList<Fatura> arr8 = new ArrayList<>();
-        arr8.add(f8);
-        arr8.add(f9);
-        
-        
-        fat.put(510685390, arr1);
-        fat.put(555555552, arr2);
-        fat.put(555555551, arr3);
-        fat.put(555555554, arr4);
-        fat.put(555555550, arr5);
-        fat.put(555555555, arr6);
-        fat.put(555555556, arr7);
-        fat.put(555555557, arr8);
+    	Fatura f1 = new Fatura(510685390,"Farmácia da Prelada, Lda",LocalDate.of(2018,Month.JANUARY,10),111111119,"Floxapen 15mg","Saúde",12.37,0.27);
+    	Fatura f2 = new Fatura(555555552,"Cabeleireiros Lucia",LocalDate.of(2018,Month.JANUARY,11),111111113,"Pacote 23","Cabeleireiros",15.50,0.42);
+    	Fatura f3 = new Fatura(555555551,"Animal Care",LocalDate.of(2018,Month.FEBRUARY, 15),111111114,"Vacina Raiva","Veterinários",45.0,0.27);
+    	Fatura f4 = new Fatura(555555554,"Pingo Doce",LocalDate.of(2018,Month.FEBRUARY, 23),111111114,"Papel Higiénico","Pendente",3.99,0.125);
+    	Fatura f5 = new Fatura(555555550,"Remax",LocalDate.of(2018, Month.MARCH, 15),111111119,"Casa Rio Tinto","Habitação",20000.0,0.41);
+    	Fatura f6 = new Fatura(555555555,"Comboios de Portugal",LocalDate.of(2018, Month.MARCH, 23),222222220,"Passe Mensal A2","Passes Mensais",25.0,0.33);
+    	Fatura f7 = new Fatura(555555556,"Vila Gale",LocalDate.of(2018, Month.APRIL, 16),111111116,"Estadia 2 Noites","Restauração e Alojamento",100.0,0.42);
+    	Fatura f8 = new Fatura(555555557,"Universidade do Minho",LocalDate.of(2018, Month.MAY, 5),111111117,"Propinas Abril 2018","Validada",0.0,0.17);
+    	Fatura f9 = new Fatura(555555557,"Universidade do Minho",LocalDate.of(2018, Month.MAY, 5),111111117,"Propinas Abril 2018","Educação",171.30,0.30);
+    	        
+    	ArrayList<Fatura> arr1 = new ArrayList<>();
+    	arr1.add(f1);
+    	ArrayList<Fatura> arr2 = new ArrayList<>();
+    	arr2.add(f2);
+    	ArrayList<Fatura> arr3 = new ArrayList<>();
+    	arr3.add(f3);
+    	ArrayList<Fatura> arr4 = new ArrayList<>();
+    	arr4.add(f4);
+    	ArrayList<Fatura> arr5 = new ArrayList<>();
+    	arr5.add(f5);
+    	ArrayList<Fatura> arr6 = new ArrayList<>();
+    	arr6.add(f6);
+    	ArrayList<Fatura> arr7 = new ArrayList<>();
+    	arr7.add(f7);
+    	ArrayList<Fatura> arr8 = new ArrayList<>();
+    	arr8.add(f8);
+    	arr8.add(f9);
+    	
+    	
+    	fat.put(510685390, arr1);
+    	fat.put(555555552, arr2);
+    	fat.put(555555551, arr3);
+    	fat.put(555555554, arr4);
+    	fat.put(555555550, arr5);
+    	fat.put(555555555, arr6);
+    	fat.put(555555556, arr7);
+    	fat.put(555555557, arr8);
     }
     
 }

@@ -2,12 +2,7 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.Scanner;
     
-public class Empresa implements java.io.Serializable{
-    private int nif;
-    private String email;
-    private String nome;
-    private String morada;
-    private String password;
+public class Empresa extends Entidade implements java.io.Serializable{
     private ArrayList<String> activ;
     private double ffiscal;
 
@@ -18,45 +13,23 @@ public class Empresa implements java.io.Serializable{
     
     
     public Empresa(){
-        this.nif = 0;
-        this.password = "";
-        this.nome = "";
-        this.email = "";
-        this.morada = "";
+        super();
         this.activ = new ArrayList<String>(0);
         this.ffiscal = 0.0;
     }
         
     public Empresa(int nif, String pass, String nome, String email, String morada, ArrayList<String> actividade, double fFiscal){
-        this.nif = nif;
-        this.password = pass;
-        this.nome = nome;
-        this.email = email;
-        this.morada = morada;
+        super(nif, pass, nome, email, morada);
         this.setActiv(actividade);
         this.ffiscal = fFiscal;
     }
         
     public Empresa(Empresa e){
-        this.nif = e.getNif();
-        this.password = e.getPassword();
-        this.nome = e.getNome();
-        this.email = e.getEmail();
-        this.morada = e.getMorada();
+        super(e);
         this.activ = e.getActiv();
         this.ffiscal = e.getFFiscal();
+    
     }
-        
-        
-    public int getNif(){ return this.nif; }
-        
-    public String getPassword(){ return this.password; }
-        
-    public String getNome(){ return this.nome; }
-        
-    public  String getEmail(){ return this.email; }
-        
-    public String getMorada(){ return this.morada; }
         
     public ArrayList<String> getActiv(){
         ArrayList<String> atividade = new ArrayList<String>(this.activ.size());
@@ -66,16 +39,7 @@ public class Empresa implements java.io.Serializable{
     }
         
     public double getFFiscal(){ return this.ffiscal;}
-    
-    public void setNif (int novoNif){ this.nif = novoNif; }
-        
-    public void setEmail (String novoEmail){ this.email = novoEmail; }
-        
-    public void setNome (String novoNome){ this.nome = novoNome; }
-           
-    public void setMorada (String novaMorada){ this.morada = novaMorada; }
-        
-    public void setPassword (String novaPass){ this.password = novaPass; }
+
         
     public void setActiv(ArrayList<String> novoActiv){
         this.activ = new ArrayList<String>(novoActiv.size());
@@ -89,23 +53,14 @@ public class Empresa implements java.io.Serializable{
         if(this==o) return true;
         if((o==null) || this.getClass() != o.getClass()) return false;
         Empresa e = (Empresa) o;
-        return this.nif == e.getNif() &&
-                this.email.equals(e.getEmail()) &&
-                this.nome.equals(e.getNome()) &&
-                this.morada.equals(e.getMorada()) &&
-                this.password.equals(e.getPassword()) &&
+        return super.equals(e) &&
                 this.activ.equals(e.getActiv()) &&
                 this.ffiscal == e.getFFiscal();
     }
         
     public String toString(){
         StringBuilder sb = new StringBuilder();
-            
-        sb.append("NIF: " +this.nif+ "\n");
-        sb.append("Nome: "+this.nome+ "\n");
-        sb.append("Morada: " +this.morada+ "\n");
-        sb.append("Email: " +this.email+ "\n");
-        sb.append("Password: "+this.password+ "\n");
+        
         sb.append(super.toString());
         sb.append("Atividade: " +this.activ+ "\n");
         sb.append("Factor fiscal: " +this.ffiscal+ "\n");
@@ -179,6 +134,7 @@ public class Empresa implements java.io.Serializable{
         
         Fatura fat = new Fatura(this.getNif(), this.getNome(), now, nifCliente, descricao, act, valor, this.getFFiscal());        
         
+        System.out.println(fat.toString());
         return fat;
     }
         

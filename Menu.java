@@ -37,7 +37,7 @@ public class Menu implements java.io.Serializable{
     
     public void menu_ativs(){
         clear();
-        out("####### Selecione a(s) atividade(s): #######");
+        out("####### Selecione a atividade: #######");
         out("\n\t1) Cabeleireiros");
         out("\t2) Despesas Familiares");
         out("\t3) Educação");
